@@ -13,6 +13,7 @@ var curDateStamp;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	newsArray = [];  // clear the array before fetching data
 	curDateStamp = new Date();
 	twentyfourHours = 3*24*60*60*1000;
 	twentyfourHoursAgo = new Date(curDateStamp - (3 * twentyfourHours) );
@@ -22,11 +23,18 @@ router.get('/', function(req, res, next) {
 	setInterval( function() {
 		// render the page once all processes are done
 		if (GuardianDone && nytDone) {
+			// sort the array first!
+			newsArray.sort(sortByDate);
 			res.render('index', { title: 'Transgender News Feed', headlines: newsArray });
 			clearInterval(this);
 		}
 	}, 1000);
 });
+
+// function to sort news items from newest to oldest date
+function sortByDate(x,y){
+	return (new Date(y.timeStamp) - new Date(x.timeStamp))
+}
 
 /*
  * Process data from The Guardian
