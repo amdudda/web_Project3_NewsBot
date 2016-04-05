@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to a #{title}.
+	p These are the headlines from the last few days:
+
+	div(style="margin-left:50px")
+		for newsItem in headlines
+			|<p> #{newsItem.itemDate} at #{newsItem.itemTime}: 
+			| <a href="#{newsItem.webUrl}">#{newsItem.webTitle}</a> [ #{newsItem.source} ]
+
+	p Eventually, I plan to set up a Twitter feed that checks every 4 or 8 hours and tweets all the headlines it finds in the most recently passed time interval.
