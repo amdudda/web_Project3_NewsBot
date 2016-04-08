@@ -8,14 +8,25 @@ var NYT_APIKEY = process.env.NYT_API_KEY;
 var BING_APIKEY = process.env.BING_API_KEY;
 
 // required modules
-var express = require('express');
+//var express = require('express');
+//var router = express.Router();
 var request = require('request');
-var router = express.Router();
 var Bing = require('node-bing-api')({ accKey: BING_APIKEY });
+var Twitter = require('twitter');
+
+// Twitter API keys
+// TODO: setup account and start doing test tweeting!
+var client = new Twitter({
+  consumer_key: process.env.TNW_CONSUMER_KEY,
+  consumer_secret: process.env.TNW_CONSUMER_SECRET,
+  access_token_key: process.env.TNW_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TNW_ACCESS_TOKEN_SECRET
+});
 
 // global variables
-var newsArray = [];
-var GuardianDone = false;
+var searchterm = "transgender"; // our search term
+var newsArray = [];  // array to store news items
+var GuardianDone = false;  // these help the app decide when all results have been processed
 var nytDone = false;
 var BingDone = false;
 var curDateStamp;
@@ -24,11 +35,43 @@ var curDateStamp;
 	var fourHours = 4*60*60*1000;
 var timeInterval;
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+// fetch data, then tweet it in callback.
+fetchNewsData(sendTweets);
+
+// a function to tweet data
+function sendTweets() {
+	console.log(newsArray);	
+	// TODO - do I want to send them all at once, or space them a couple minutes apart?
+	for (var n=0; n<newsArray.length; n++) {
+		// tweet our news item
+		newsItem = newsArray[n];
+		var myTweet = "[" + newsItem.source + "] ";
+		myTweet += newsItem.webTitle;
+		myTweet = myTweet.substring(0,119) + "… ";
+		myTweet += newsItem.webUrl;
+		client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
+			  if (error) throw error;
+			  console.log(tweet);  // Tweet body. 
+			  console.log(response);  // Raw response object. 
+		});
+	}
+};
+
+// a function to add data to database
+// TODO: set up mongodb database to store news items
+function storeNewsItems(){
+
+};
+
+/*
+ * function to fetch data for Twitter to post.
+ * takes a callback function to work with data once it's been retrieved
+ */
+function fetchNewsData(callback) {
+
 	newsArray = [];  // clear the array before fetching data
 	curDateStamp = new Date();
-	timeInterval = new Date(curDateStamp - threeDays );
+	timeInterval = new Date(curDateStamp - fourHours);
 	fetchGuardianData();
 	fetchNYTData();
 	fetchBingData();
@@ -36,14 +79,17 @@ router.get('/', function(req, res, next) {
 	setInterval( function() {
 		// render the page once all processes are done
 		if (GuardianDone && nytDone && BingDone) {
-			console.log("news feed homepage requested");
 			// sort the array first!
 			newsArray.sort(sortByDate);
-			res.render('index', { title: 'Transgender News Feed', headlines: newsArray });
+			// do our callback work
+			callback();
+			// then stop the timer because Our Work Here Is Done
 			clearInterval(this);
 		}
 	}, 1000);
-});
+
+}
+
 
 // function to sort news items from newest to oldest date
 function sortByDate(x,y){
@@ -54,7 +100,15 @@ function sortByDate(x,y){
  * Process data from The Guardian
  */
 function fetchGuardianData() {
-	request ( fetchNewsUrl() , function(error, guardianResponse, body) {
+	var bUrl = "http://content.guardianapis.com/search";
+	var parms = {
+		'from-date': timeInterval.toISOString(),
+		'order-by': 'oldest',
+		'q': 'transgender',
+		'api-key': G_APIKEY
+		};
+
+	request ( {uri: bUrl, qs: parms} , function(error, guardianResponse, body) {
 		if (!error) {
 			// process Guardian Data
 			parseGuardianData(JSON.parse(body));
@@ -87,14 +141,6 @@ function parseGuardianData(jsonResp) {
 			}
 		newsArray.push(myItemInfo);
 	}
-}
-
-function fetchNewsUrl() {
-	// this isn't quite Proper(tm), but it gets the job done.
-
-	// compose our URL
-	var requestURL = "http://content.guardianapis.com/search?from-date=" + timeInterval.toISOString() + "&order-by=oldest&q=transgender&api-key=" + G_APIKEY;
-	return requestURL;
 }
 
 /*
@@ -138,20 +184,24 @@ function parseNytData(myData) {
 	//console.log(newsItems[0]);
 	for (var j = 0; j<newsItems.length; j++) {
 		var myNews = newsItems[j];
-		// TODO: remove items outside our time window.
+		// remove items outside our time window.
+		// iso dates happen to be comparable alphanumerically when they use the same timezone metadata.
+		// see http://stackoverflow.com/questions/13715561/compare-iso-8601-date-strings-in-javascript
 		var itemTimestamp = myNews.pub_date;
-		var itemDate = itemTimestamp.substring(0,10);
-		var itemTime = itemTimestamp.substring(11,16);
-		var myItemInfo = { 
-			'source': 'NYT',
-			'webUrl': myNews.web_url, 
-			'webTitle': myNews.headline.main,
-			'timeStamp': itemTimestamp,
-			'itemDate': itemDate,
-			'itemTime': itemTime,
-			'summary': myNews.abstract
-			}
-		newsArray.push(myItemInfo);
+		if (itemTimestamp >= timeInterval.toISOString()) {
+			var itemDate = itemTimestamp.substring(0,10);
+			var itemTime = itemTimestamp.substring(11,16);
+			var myItemInfo = { 
+				'source': 'NYT',
+				'webUrl': myNews.web_url, 
+				'webTitle': myNews.headline.main,
+				'timeStamp': itemTimestamp,
+				'itemDate': itemDate,
+				'itemTime': itemTime,
+				'summary': myNews.abstract
+				}
+			newsArray.push(myItemInfo);
+		}
 	}
 
 }
@@ -169,6 +219,7 @@ myBeginDate = "" + timeInterval.getFullYear();
 	ans2 = pad.substring(0, pad.length - str.length) + str;
 	myBeginDate += ans2;
 	return myBeginDate;
+
 }
 
 /*
@@ -195,23 +246,25 @@ function parseBingData(newsItems){
 		var newsItem = newsItems[i];
 		var headline = newsItem.Title;
 		var itemUrl = newsItem.Url;
-		//var itemDate = newsItems[i].Date;
+		// ignore news items that are datestamped earlier than our time window
 		var itemTimestamp = newsItem.Date;
-		var itemDate = itemTimestamp.substring(0,10);
-		var itemTime = itemTimestamp.substring(11,16);
-		var description = newsItem.Description
-		var itemData = {
-			'source': 'Bing',
-			'webTitle': headline, 
-			'webUrl': itemUrl, 
-			'timeStamp': itemTimestamp,
-			'itemDate': itemDate,
-			'itemTime': itemTime,
-			'summary': description
-			};
-		//console.log("item" + i + ": " + JSON.stringify(itemData) + "\n");
-		newsArray.push(itemData);
+		if (itemTimestamp >= timeInterval.toISOString()) {
+			var itemDate = itemTimestamp.substring(0,10);
+			var itemTime = itemTimestamp.substring(11,16);
+			var description = newsItem.Description
+			var itemData = {
+				'source': 'Bing',
+				'webTitle': headline, 
+				'webUrl': itemUrl, 
+				'timeStamp': itemTimestamp,
+				'itemDate': itemDate,
+				'itemTime': itemTime,
+				'summary': description
+				};
+			//console.log("item" + i + ": " + JSON.stringify(itemData) + "\n");
+			newsArray.push(itemData);
+		}
 	}
 }
 
-module.exports = router;
+//module.exports = router;
