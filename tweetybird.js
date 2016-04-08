@@ -8,8 +8,6 @@ var NYT_APIKEY = process.env.NYT_API_KEY;
 var BING_APIKEY = process.env.BING_API_KEY;
 
 // required modules
-//var express = require('express');
-//var router = express.Router();
 var request = require('request');
 var Bing = require('node-bing-api')({ accKey: BING_APIKEY });
 var Twitter = require('twitter');
@@ -104,7 +102,7 @@ function fetchGuardianData() {
 	var parms = {
 		'from-date': timeInterval.toISOString(),
 		'order-by': 'oldest',
-		'q': 'transgender',
+		'q': searchterm,
 		'api-key': G_APIKEY
 		};
 
@@ -148,14 +146,12 @@ function parseGuardianData(jsonResp) {
  */
 function fetchNYTData() {
 	// set my API request properties
-	// TODO: In twitter bot, we need previous day so we can check for stuff in cases where it kicks off at, say, 1am.
-	//build a string for begin date
 	myBeginDate = getBeginDate();
 	
 	var baseUrl = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 	var params = {
 		'api-key': NYT_APIKEY,
-		'q': 'transgender',
+		'q': searchterm,
 		'begin_date': myBeginDate
 		}
 
@@ -226,7 +222,7 @@ myBeginDate = "" + timeInterval.getFullYear();
  * fetch and process Bing data
  */
 function fetchBingData(){
-	Bing.news("transgender", {
+	Bing.news(searchterm, {
 		top: 15,  // Number of results (max 15) 
 		newsSortBy: "Date", //Choices are: Date, Relevance 
 	}, function(error, res, body){
@@ -266,5 +262,3 @@ function parseBingData(newsItems){
 		}
 	}
 }
-
-//module.exports = router;
