@@ -38,21 +38,29 @@ fetchNewsData(sendTweets);
 
 // a function to tweet data
 function sendTweets() {
-	console.log(newsArray);	
+	//console.log(newsArray);
+	var n = 0;
 	// TODO - do I want to send them all at once, or space them a couple minutes apart?
-	for (var n=0; n<newsArray.length; n++) {
+	//for (var n=0; n<newsArray.length; n++) {
+	setInterval( function(){
 		// tweet our news item
 		newsItem = newsArray[n];
 		var myTweet = "[" + newsItem.source + "] ";
 		myTweet += newsItem.webTitle;
 		myTweet = myTweet.substring(0,119) + "… ";
 		myTweet += newsItem.webUrl;
+		console.log("#" + n + ") " + myTweet);
+		/* TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
 		client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
 			  if (error) throw error;
 			  console.log(tweet);  // Tweet body. 
 			  console.log(response);  // Raw response object. 
 		});
-	}
+		*/
+		n++;
+		if (n >= newsArray.length) clearInterval(this); // stop the timer once we've tweeted everything
+	}, 3000);
+	//}
 };
 
 // a function to add data to database
