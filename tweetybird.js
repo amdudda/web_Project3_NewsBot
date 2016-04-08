@@ -40,7 +40,8 @@ fetchNewsData(sendTweets);
 function sendTweets() {
 	//console.log(newsArray);
 	var n = 0;
-	// TODO - do I want to send them all at once, or space them a couple minutes apart?
+	var threeMinutes = 3*60*1000;
+	// I want to send space my tweets out a couple minutes apart?
 	//for (var n=0; n<newsArray.length; n++) {
 	setInterval( function(){
 		// tweet our news item
@@ -57,9 +58,10 @@ function sendTweets() {
 			  console.log(response);  // Raw response object. 
 		});
 		*/
-		n++;
-		if (n >= newsArray.length) clearInterval(this); // stop the timer once we've tweeted everything
-	}, 3000);
+		n++; // increment to next news item.
+		// stop the timer once we've tweeted everything.
+		if (n >= newsArray.length) clearInterval(this); 
+	}, threeMinutes);
 	//}
 };
 
