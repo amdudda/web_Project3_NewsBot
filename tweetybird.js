@@ -21,6 +21,12 @@ var client = new Twitter({
   access_token_secret: process.env.TNW_ACCESS_TOKEN_SECRET
 });
 
+// set up database connection
+var mongoose = require('mongoose');
+var db = mongoose.connect('mongodb://localhost:27017/transnews');
+// connect to our database Schema
+var NewsItem = require('./models/newsitems.js');
+
 // global variables
 var searchterm = "transgender"; // our search term
 var newsArray = [];  // array to store news items
@@ -34,7 +40,12 @@ var curDateStamp;
 var timeInterval;
 
 // fetch data, then tweet it in callback.
-fetchNewsData(sendTweets);
+fetchNewsData(postAndSave);
+
+function postAndSave(){
+	sendTweets();
+	storeNewsItems();
+};
 
 // a function to tweet data
 function sendTweets() {
@@ -61,14 +72,30 @@ function sendTweets() {
 		n++; // increment to next news item.
 		// stop the timer once we've tweeted everything.
 		if (n >= newsArray.length) clearInterval(this); 
-	}, threeMinutes);
+	}, 1000);
 	//}
 };
 
 // a function to add data to database
-// TODO: set up mongodb database to store news items
 function storeNewsItems(){
-
+	// iterate through newsArray and add each item to the database
+	for (i=0; i<newsArray.length; i++) {
+		var article = newsArray[i];
+		var newNewsItem = NewsItem(article);
+		newNewsItem.save(function(err){
+			if (err) {
+				if (err.name == "ValidationError") {
+					console.log('Invalid data in record #'+ i + ':\n' + article);
+					console.log('You may need to add this record manually.');
+				}
+				if (err.code == 11000) {
+					console.log('An article already exists in the database. Skipping the record.');
+				}
+				else console.log('An unexpected error occurred:\n' +err);  // some other error happened we haven't foreseen
+			}
+		});
+		console.log("added news item!");
+	}
 };
 
 /*

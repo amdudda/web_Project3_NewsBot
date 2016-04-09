@@ -5,6 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// set up database connection
+var mongoose = require('mongoose');
+var db = mongoose.connect('mongodb://localhost:27017/transnews');
+
+// site routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
