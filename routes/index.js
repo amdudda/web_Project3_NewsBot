@@ -36,6 +36,11 @@ router.get('/about',function(req,res,next){
 	res.render('about', { title: myTitle});
 });
 
+/* GET search page */
+router.get('/search',function(req,res,next){
+	res.render('search', { title: myTitle});
+});
+
 
 // function to sort news items from newest to oldest date
 function sortByDate(x,y){
