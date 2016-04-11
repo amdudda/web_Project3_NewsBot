@@ -4,14 +4,20 @@ html
 		title= title
 		link(rel='stylesheet', href='/stylesheets/style.css')
 	body
-
-		h1 #{title}
-		p Welcome to #{title}!
-		hr
+		.heading
+			h1 #{title}
+			p Welcome to #{title}!
 
 		block content
 
 #footer
-	a(href="/") Home
-	span &nbsp;
-	a(href="/about") About
+	p Navigation: 
+		a(href="/") Home
+		span &nbsp;-&nbsp;
+		a(href="/about") About
+		span.floatright &nbsp;&nbsp;&nbsp;&nbsp;News Sources: 
+			a(href="https://www.bing.com/news") Bing News
+			span &nbsp;-&nbsp; 
+			a(href="http://www.theguardian.com") The Guardian
+			span &nbsp;-&nbsp; 
+			a(href="http://www.nytimes.com") The New York Times
