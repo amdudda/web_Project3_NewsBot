@@ -93,9 +93,12 @@ function storeNewsItems(){
 				}
 				else console.log('An unexpected error occurred:\n' +err);  // some other error happened we haven't foreseen
 			}
+			else {
+				console.log("Added news item!");
+			}
 		});
-		console.log("added news item!");
 	}
+	mongoose.connection.close();
 };
 
 /*
