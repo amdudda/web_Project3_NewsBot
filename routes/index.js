@@ -25,8 +25,8 @@ router.get('/', function(req, res, next) {
 	// extract data from database - find past 3 days' worth and sort descending
 	NewsItems.find({timeStamp:{$gt:threeDaysAgo}}).sort({timeStamp : 'desc'}).exec( function(err,newsArray){
 		if (err) console.log(err);
-		console.log(JSON.stringify(newsArray));
-		res.render('index',{ title: 'Transgender News Feed', headlines: newsArray })
+		//console.log(JSON.stringify(newsArray));
+		res.render('index',{ title: 'Transgender News Pulse', headlines: newsArray })
 	});
 });
 

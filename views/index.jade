@@ -1,17 +1,16 @@
 extends layout
 
 block content
-	h1= title
-	p Welcome to a #{title}.
-	p These are the headlines from the last three days:
 
 	div(style="margin-left:50px")
 		for newsItem in headlines
 			|<p> #{newsItem.itemDate} at #{newsItem.itemTime}: 
-			| <a href="#{newsItem.webUrl}">#{newsItem.webTitle}</a> [ #{newsItem.source} ]
-			div.articleSummary			
+			| <a href="#{newsItem.webUrl}" id="#{newsItem._id}">#{newsItem.webTitle}</a> [ #{newsItem.source} ]
+			div(class="articleSummary" id="as#{newsItem._id}")
 				if newsItem.summary
 					p #{newsItem.summary}
 				else 
 					p (No summary available.)
 	p Eventually, I plan to set up a Twitter feed that checks every 4 or 8 hours and tweets all the headlines it finds in the most recently passed time interval.
+
+	script(src="/javascripts/summaries.js" type="text/javascript")

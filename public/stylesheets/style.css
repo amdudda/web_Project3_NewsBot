@@ -11,4 +11,5 @@ a {
 	border: 2px dashed gray;
 	margin-left: 128px;
 	padding: 0 10px;
+	display: none;
 }
