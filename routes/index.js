@@ -41,11 +41,27 @@ router.get('/search',function(req,res,next){
 	res.render('search', { title: myTitle});
 });
 
+/* use GET to fetch and show Archive search results */
+router.get('/searchArchive',function(req,res,next){
+	var myQuery = req.query;
+	var qText = myQuery.searchType;
+	// convert search string to human-readable format:
+	if (qText == "between") {
+		qText += " " + myQuery.firstdate + " and " + myQuery.seconddate;
+	} else {
+		qText += " " + myQuery.firstdate;
+	}
+		
+
+	//var qText= JSON.stringify(req.query) + "\nin development, no results being returned yet!";
+	res.render('search', {title: myTitle, queryText: qText, headlines: "headlines go here"});
+});
 
 // function to sort news items from newest to oldest date
+/*
 function sortByDate(x,y){
 	return (new Date(y.timeStamp) - new Date(x.timeStamp))
 }
-
+*/
 
 module.exports = router;

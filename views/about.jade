@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	h2 About Transgender News Pulse
+
+	p This website hosts a Twitter bot that checks three news sources on a periodic basis, then tweets what it finds at three-minute intervals until all articles have been tweeted.  Currently this kicks off every eight hours, but I hope to increase that if I find a way to pay for the non-free tiers on my hosting site.
+	p The three news APIs I currently access are 
+		a(href="https://datamarket.azure.com/home") Microsoft Azure (Bing)
+		span , &nbsp;
+		a(href="http://developer.nytimes.com/") New York Times
+		span , and 
+		a(href="http://open-platform.theguardian.com/explore/") The Guardian
+		span.  I selected these for the very simple reason that they are free.
+	p Feel free to 
+		a(href="mailto:tk054wm@go.minneapolis.edu") contact me 
+		span with questions or suggestions (especially if you know of any other free API services I could use).

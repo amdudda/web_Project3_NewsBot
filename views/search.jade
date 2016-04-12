@@ -1,0 +1,35 @@
+extends layout
+
+block content
+	h2 Search the #{title} archives
+	form(id="searchArchive" action="/searchArchive" method="GET")
+		table
+			tbody
+				tr
+					td
+						input(type="radio" name="searchType" id="searchType" value="before" checked)
+						label Before
+						br
+						input(type="radio" name="searchType" id="searchType" value="after")
+						label After
+						br
+						input(type="radio" name="searchType" id="searchType" value="between")
+						label Between
+					td(align="center")
+						input(name="firstdate" id="firstdate" type="date" required)
+						br
+						span#secondDate AND
+							br 
+							input(name="seconddate" id="seconddate" type="date")
+					td
+						button(type="submit" name="doSearch" id="doSearch" value="Search") Search the<br>Archive
+
+	hr
+
+	if queryText
+		p Results found #{queryText}:
+	else
+		p Results will display here.
+
+	if headlines.length	
+		p #{headlines}
