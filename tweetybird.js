@@ -98,7 +98,7 @@ function storeNewsItems(){
 			}
 		});
 	}
-	mongoose.connection.close();
+	//mongoose.connection.close();
 };
 
 /*
