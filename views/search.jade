@@ -7,20 +7,20 @@ block content
 			tbody
 				tr
 					td
-						input(type="radio" name="searchType" id="searchType" value="before" checked)
+						input(type="radio" name="searchType" id="searchBefore" value="before" checked)
 						label Before
 						br
-						input(type="radio" name="searchType" id="searchType" value="after")
+						input(type="radio" name="searchType" id="searchAfter" value="after")
 						label After
 						br
-						input(type="radio" name="searchType" id="searchType" value="between")
+						input(type="radio" name="searchType" id="searchBetween" value="between")
 						label Between
 					td(align="center")
 						input(name="firstdate" id="firstdate" type="date" required)
 						br
 						span#secondDate AND
 							br 
-							input(name="seconddate" id="seconddate" type="date")
+							input(name="seconddate" id="seconddate" type="date" required=false)
 					td
 						button(type="submit" name="doSearch" id="doSearch" value="Search") Search the<br>Archive
 
@@ -33,3 +33,5 @@ block content
 
 	if headlines	
 		p #{headlines}
+
+	script(src="/javascripts/search.js" type="text/javascript")

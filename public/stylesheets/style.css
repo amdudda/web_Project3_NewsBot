@@ -61,3 +61,7 @@ a {
 .floatright {
 	float: right;
 }
+
+#secondDate {
+	display: none;
+}
