@@ -31,7 +31,17 @@ block content
 	else
 		p Results will display here.
 
-	if headlines	
-		p #{headlines}
+	if headlines
+		for newsItem in headlines
+			p.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 
+				a(href="#{newsItem.webUrl}" id="#{newsItem._id}") #{newsItem.webTitle}
+				span &nbsp;[ #{newsItem.source} ]
+				div(class="articleSummary" id="as#{newsItem._id}")
+					if newsItem.summary
+						p #{newsItem.summary}
+					else 
+						p (No summary available.)
+	else
+		p No results found!
 
 	script(src="/javascripts/search.js" type="text/javascript")

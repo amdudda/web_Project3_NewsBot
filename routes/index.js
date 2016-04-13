@@ -43,25 +43,35 @@ router.get('/search',function(req,res,next){
 
 /* use GET to fetch and show Archive search results */
 router.get('/searchArchive',function(req,res,next){
+	console.log(req.query);
 	var myQuery = req.query;
 	var qText = myQuery.searchType;
+	var qParams;
+	var date1 = new Date(myQuery.firstdate);
 	// convert search string to human-readable format:
 	if (qText == "between") {
+		console.log("fetching between");
 		qText += " " + myQuery.firstdate + " and " + myQuery.seconddate;
-	} else {
+		var date2 = new Date(myQuery.seconddate);
+		date2.setDate(date2.getDate() + 1);  // users are going to expect results to include the ending date...
+		qParams = { timeStamp: { $gte : date1, $lte : date2 } };
+		console.log(qParams);
+	} else if (qText == "before") {
+		console.log("be-foooooore! *golf club swings*")
 		qText += " " + myQuery.firstdate;
+		qParams = { timeStamp: { $lt : date1 } };
+	} else if (qText == "after") {  // after
+		console.log("after")
+		qText += " " + myQuery.firstdate;
+		qParams = { timeStamp: { $gt : date1 } };
 	}
-		
 
-	//var qText= JSON.stringify(req.query) + "\nin development, no results being returned yet!";
-	res.render('search', {title: myTitle, queryText: qText, headlines: "headlines go here"});
+	// fetch data from mongoDB and send back t osearch page
+	NewsItems.find(qParams).sort({timeStamp : 'desc'}).exec( function(err,newsArray){
+		if (err) console.log(err);
+		res.render('search', {title: myTitle, queryText: qText, headlines: newsArray});
+	});
+
 });
-
-// function to sort news items from newest to oldest date
-/*
-function sortByDate(x,y){
-	return (new Date(y.timeStamp) - new Date(x.timeStamp))
-}
-*/
 
 module.exports = router;
