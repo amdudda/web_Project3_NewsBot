@@ -71,7 +71,10 @@ function sendTweets() {
 		*/
 		n++; // increment to next news item.
 		// stop the timer once we've tweeted everything.
-		if (n >= newsArray.length) clearInterval(this); 
+		if (n >= newsArray.length) {
+			clearInterval(this); 
+			mongoose.connection.close();
+		}
 	}, 1000);
 	//}
 };
@@ -98,7 +101,7 @@ function storeNewsItems(){
 			}
 		});
 	}
-	//mongoose.connection.close();
+	
 };
 
 /*
