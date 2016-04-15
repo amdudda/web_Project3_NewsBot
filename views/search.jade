@@ -4,25 +4,42 @@ block content
 	h2 Search the #{title} archives
 	form(id="searchArchive" action="/searchArchive" method="GET")
 		table
-			tbody
-				tr
-					td
-						input(type="radio" name="searchType" id="searchBefore" value="before" checked)
-						label Before
-						br
-						input(type="radio" name="searchType" id="searchAfter" value="after")
-						label After
-						br
-						input(type="radio" name="searchType" id="searchBetween" value="between")
-						label Between
-					td(align="center")
-						input(name="firstdate" id="firstdate" type="date" required)
-						br
-						span#secondDate AND
-							br 
-							input(name="seconddate" id="seconddate" type="date" required=false)
-					td
-						button(type="submit" name="doSearch" id="doSearch" value="Search") Search the<br>Archive
+			tr
+				th(colspan="2") Date Search
+				th(rowspan="2" width="50" style="border: 1px solid #8D008D;") OR
+				th Text Search
+			tr
+				td
+					input(type="radio" name="searchType" id="searchBefore" value="before" checked)
+					label Before
+					br
+					input(type="radio" name="searchType" id="searchAfter" value="after")
+					label After
+					br
+					input(type="radio" name="searchType" id="searchBetween" value="between")
+					label Between
+				td(align="center")
+					input(name="firstdate" id="firstdate" type="date" required)
+					br
+					span#secondDate AND
+						br 
+						input(name="seconddate" id="seconddate" type="date" required=false)
+				td
+					input(type="radio" name="searchType" id="text" value="text")
+					label Find 
+					select(id="find")
+						option(value="exact") Exact phrase
+						option(value="or") Exact word(s)
+						option(value="pattern") Part of word
+					br
+					input(type="text" name="searchString" id="searchString")
+					br
+					span in						
+					select(id="fieldToSearch")
+						option(value="summary") summaries
+						option(value="heading") headlines
+				td
+					button(type="submit" name="doSearch" id="doSearch" value="Search") Search the<br>Archive
 
 	hr
 
