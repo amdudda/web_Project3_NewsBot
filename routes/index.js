@@ -64,6 +64,12 @@ router.get('/searchArchive',function(req,res,next){
 		console.log("after")
 		qText += " " + myQuery.firstdate;
 		qParams = { timeStamp: { $gt : date1 } };
+	} else if (qText == "text") {
+		console.log("text")
+		qText = "Text search for '" + myQuery.searchString + "'";
+		// parse out other form choices and create the query parameters.
+		qParams = getTextSearchParams(myQuery);
+		console.log(qParams);
 	}
 
 	// fetch data from mongoDB and send back t osearch page
@@ -73,5 +79,30 @@ router.get('/searchArchive',function(req,res,next){
 	});
 
 });
+
+// a function that returns a query string for text-based searches
+function getTextSearchParams(formData){
+	var type = formData.find;
+	console.log(type);
+	var findIn = formData.fieldToSearch;
+	var qParm = "{ $text : { $search : ";
+	// TODO NONE of these searches work!
+	// three types of searches - phrase, boolean OR, and pseudowildcard
+	if (type == "exact") {
+		qParm +=  '"\\"' + formData.searchString + '\\""}}';
+	} else if (type == "or") {
+		qParm += '"' + formData.searchString + '"';
+	} else if (type == "pattern") {
+		// here we set up a regex search - this one works if I c/p result into Mongo...??
+		// https://docs.mongodb.org/manual/reference/operator/query/regex/#regex-case-insensitive
+		qParm = "{" + findIn + ": { $regex: \/" + formData.searchString + "\/i } }";
+	} else {  // TODO we have invalid selection, return everything?
+		qParm = {};
+	}
+
+	// append final curly braces
+	//qParm +=  "}}";
+	return qParm;
+}
 
 module.exports = router;

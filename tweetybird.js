@@ -219,6 +219,7 @@ function fetchNYTData() {
 function parseNytData(myData) {
 	// here we parse the NYT data.  The articles we want to show are in the docs element of the JSON object.
 	var newsItems = myData.response.docs;
+	console.log(newsItems.length + " NYT articles found")
 	//console.log("nyt data:");
 	//console.log(newsItems[0].abstract);
 	for (var j = 0; j<newsItems.length; j++) {
@@ -227,8 +228,8 @@ function parseNytData(myData) {
 		// remove items outside our time window.
 		// iso dates happen to be comparable alphanumerically when they use the same timezone metadata.
 		// see http://stackoverflow.com/questions/13715561/compare-iso-8601-date-strings-in-javascript
-		var itemTimestamp = myNews.pub_date;
-		if (itemTimestamp >= timeInterval.toISOString()) {
+		var itemTimestamp = new Date(myNews.pub_date);
+		if (itemTimestamp >= timeInterval) {
 			var itemDate = itemTimestamp.substring(0,10);
 			var itemTime = itemTimestamp.substring(11,16);
 			var myItemInfo = { 
@@ -241,6 +242,7 @@ function parseNytData(myData) {
 				'summary': myNews.abstract
 				}
 			//console.log('nyt summary:' + myItemInfo.summary);
+			console.log(myItemInfo);
 			newsArray.push(myItemInfo);
 		}
 	}

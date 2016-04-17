@@ -19,7 +19,7 @@ block content
 					input(type="radio" name="searchType" id="searchBetween" value="between")
 					label Between
 				td(align="center")
-					input(name="firstdate" id="firstdate" type="date" required)
+					input(name="firstdate" id="firstdate" type="date" required=true)
 					br
 					span#secondDate AND
 						br 
@@ -27,16 +27,16 @@ block content
 				td
 					input(type="radio" name="searchType" id="text" value="text")
 					label Find 
-					select(id="find")
-						option(value="exact") Exact phrase
+					select(id="find" name="find")
+						option(value="exact" ) Exact phrase
 						option(value="or") Exact word(s)
-						option(value="pattern") Part of word
+						option(value="pattern" selected) Part of word
 					br
 					input(type="text" name="searchString" id="searchString")
 					br
 					span in						
-					select(id="fieldToSearch")
-						option(value="summary") summaries
+					select(id="fieldToSearch" name="fieldToSearch")
+						option(value="summary" selected) summaries
 						option(value="heading") headlines
 				td
 					button(type="submit" name="doSearch" id="doSearch" value="Search") Search the<br>Archive
