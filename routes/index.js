@@ -95,7 +95,12 @@ function getTextSearchParams(formData){
 	} else if (type == "pattern") {
 		// here we set up a regex search - this one works if I c/p result into Mongo...??
 		// https://docs.mongodb.org/manual/reference/operator/query/regex/#regex-case-insensitive
-		qParm = "{" + findIn + ": { $regex: \/" + formData.searchString + "\/i } }";
+		// this link gave me the hint for mongoose syntax: http://stackoverflow.com/questions/9824010/mongoose-js-find-user-by-username-like-value
+		qParm =	{}
+		if (formData.searchString == "summary")
+			qParm.summary = new RegExp(formData.searchString,"i");
+		else
+			qParm.webTitle = new RegExp(formData.searchString,"i");
 	} else {  // TODO we have invalid selection, return everything?
 		qParm = {};
 	}
