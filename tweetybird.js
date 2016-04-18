@@ -218,6 +218,7 @@ function fetchNYTData() {
 
 function parseNytData(myData) {
 	// here we parse the NYT data.  The articles we want to show are in the docs element of the JSON object.
+	//console.log(myData);	
 	var newsItems = myData.response.docs;
 	console.log(newsItems.length + " NYT articles found")
 	//console.log("nyt data:");
