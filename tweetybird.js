@@ -227,8 +227,6 @@ function parseNytData(myData) {
 		var myNews = newsItems[j];
 		//console.log(myNews.abstract);
 		// remove items outside our time window.
-		// iso dates happen to be comparable alphanumerically when they use the same timezone metadata.
-		// see http://stackoverflow.com/questions/13715561/compare-iso-8601-date-strings-in-javascript
 		var itemTimestamp = new Date(myNews.pub_date);
 		if (itemTimestamp >= timeInterval) {
 			var itemDate = itemTimestamp.substring(0,10);

@@ -87,28 +87,21 @@ function getTextSearchParams(formData){
 	var findIn = formData.fieldToSearch;
 	var qString;
 	var qParm = {};
-	// TODO only the regex search works!  -- I may have to just create a unified index and search both text and headlines.
+	// TODO create a unified index and search both text and headlines.
 	// three types of searches - phrase, boolean OR, and pseudowildcard
 	if (type == "exact") {
 		qString=  "\"" + formData.searchString + "\"";  // trying to get it to pass '\"coffee shop\"' or whatever
-		if (findIn == "summary")
-			qParm.summary = qString;
-		else
-			qParm.webTitle = qString;
+		qParm = { $text: { $search : qString } };		
 	} else if (type == "or") {
-		if (findIn == "summary")
-			qParm = { $text : { $search : formData.searchString } };
-		else
-			qParm.webTitle = formData.searchString;
+		qParm = { $text : { $search : formData.searchString } };
 	} else if (type == "pattern") {
 		// here we set up a regex search - this one works if I c/p result into Mongo...??
 		// https://docs.mongodb.org/manual/reference/operator/query/regex/#regex-case-insensitive
 		// this link gave me the hint for mongoose syntax: http://stackoverflow.com/questions/9824010/mongoose-js-find-user-by-username-like-value
-		qParm =	{}
-		if (findIn == "summary")
-			qParm.summary = new RegExp(formData.searchString,"i");
-		else
-			qParm.webTitle = new RegExp(formData.searchString,"i");
+		// https://docs.mongodb.org/manual/reference/operator/query/or/
+		regex = new RegExp(formData.searchString,"i");
+		qParm = { $or : [ {summary : regex}, {webTitle: regex} ]};
+		
 	} else {  // TODO we have invalid selection, return everything?
 		qParm = {};
 	}
