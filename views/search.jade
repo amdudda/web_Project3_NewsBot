@@ -41,22 +41,16 @@ block content
 	hr
 
 	if queryText
-		p Results found #{queryText}:
+		p Results found for:  #{queryText}:
 	else
 		p Results will display here.
 
 	if headlines
-		for newsItem in headlines
-			p.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 
-				a(href="#{newsItem.webUrl}" id="#{newsItem._id}") #{newsItem.webTitle}
-				span &nbsp;[ #{newsItem.source} ]
-				div(class="articleSummary" id="as#{newsItem._id}")
-					if newsItem.summary
-						p #{newsItem.summary}
-					else 
-						p (No summary available.)
-	else
-		p No results found!
+		if (headlines.length > 0)
+			include articles
+		else
+			p No results found!
+	
 
 	// summaries before search so I can override any code in summaries
 	script(src="/javascripts/summaries.js" type="text/javascript")
