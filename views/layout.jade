@@ -5,14 +5,17 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 	body
 		.heading
+			div.floatright
+				if user
+					span Hello, #{user.fullname}!  Click to&nbsp;
+						a(href="/favorites") view your favorites.
+					br 
+					span Or&nbsp;
+						a(href="/logout") log out.
+				else
+					a(href="/login") Log in or register
 			h1 #{title}
 			p Welcome to #{title}!
-			if user
-				span.floatright Hello, #{user.fullname}!  Click to
-					a(href="/favorites") view your favorites.
-			else
-				span.floatright 
-					a(href="/login") Log in or register
 
 		block content
 

@@ -19,6 +19,7 @@ var myTitle = "Transgender News Pulse";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	console.log(req.user);
 	newsArray = [];  // clear the array before fetching data
 	curDateStamp = new Date();
 	twentyfourHours = 24*60*60*1000;
@@ -29,7 +30,7 @@ router.get('/', function(req, res, next) {
 	NewsItems.find({timeStamp:{$gt:threeDaysAgo}}).sort({timeStamp : 'desc'}).exec( function(err,newsArray){
 		if (err) console.log(err);
 		//console.log(JSON.stringify(newsArray));
-		res.render('index',{ title: myTitle, headlines: newsArray })
+		res.render('index',{ title: myTitle, headlines: newsArray, user: req.user })
 	});
 });
 
@@ -40,7 +41,8 @@ router.get('/about',function(req,res,next){
 
 /* GET search page */
 router.get('/search',function(req,res,next){
-	res.render('search', { title: myTitle});
+	console.log(req.user)
+	res.render('search', { title: myTitle, user: req.user});
 });
 
 /* GET login/signup page */
@@ -77,6 +79,12 @@ router.post('/login', passport.authenticate('local-login', {
 	failureRedirect: '/login',
 	failureFlash: true
 }));
+
+/* GET logout */
+router.get('/logout', function(req, res, next) {
+	req.logout();  // passport middleware adds this to req.
+	res.redirect('/');  // then send user back to homepage.
+});
 
 /* use GET to fetch and show Archive search results */
 router.get('/searchArchive',function(req,res,next){

@@ -67,6 +67,12 @@ h3 {
 	float: right;
 }
 
+div.floatright {
+	/* position:fixed; */
+	margin-right: 100px;
+	clear: both;
+}
+
 #secondDate {
 	display: none;
 }
