@@ -45,15 +45,15 @@ router.get('/search',function(req,res,next){
 
 /* GET login/signup page */
 router.get('/login',function(req,res,next){
-	res.render('login', { title: myTitle});
+	res.render('login', { title: myTitle, message : req.flash('signupMessage') });
 });
 
 /* GET favorites page */
-router.get('/favorites',function(req,res,next){
-	console.log("loading favorites...");
-	console.log(req.body);
-	var userFaves = req.body.favorites;
-	res.render('favorites', { title: myTitle, headlines: userFaves});
+router.get('/favorites', isLoggedIn ,function(req,res,next){
+	//console.log("loading favorites...");
+	//console.log(JSON.stringify(req.user));
+	var userFaves = req.user.favorites;
+	res.render('favorites', { title: myTitle, headlines: userFaves, user: req.user});
 });
 
 /*
@@ -146,6 +146,18 @@ function getTextSearchParams(formData){
 	// append final curly braces
 	//qParm +=  "}}";
 	return qParm;
+}
+
+/*
+ * Middleware function to verify user is logged in and authorized.
+ * sends user back to homepage on failure.
+ * redirect also cancels all route handling and just redirects to wherever specified.
+ */
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	} 
+	res.redirect('/login');  // note lack of else - we want to be really sure the user goes somewhere if the if clause falls through.
 }
 
 module.exports = router;

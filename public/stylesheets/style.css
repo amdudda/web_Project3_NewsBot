@@ -1,6 +1,7 @@
 {
 	background: #E55DE7;
 }
+
 body {
 	position: relative;
 	padding: 100px 50px;
@@ -9,6 +10,10 @@ body {
 
 a {
   color: #8D008D;
+}
+
+h3 {
+	font-style: italic;
 }
 
 .heading {

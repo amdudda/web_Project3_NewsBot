@@ -13,7 +13,10 @@ block content
 		br
 		button#login(type="submit" name="login" value="login") Log In...
 
+
 	h2 Or register to create an account
+	if message.length > 0
+		h3=message
 	form(id="login" name="login" action="/signup" method="post")
 		label Display Name
 		input#fullname(type="text" name="fullname" required)

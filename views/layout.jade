@@ -7,6 +7,12 @@ html
 		.heading
 			h1 #{title}
 			p Welcome to #{title}!
+			if user
+				span.floatright Hello, #{user.fullname}!  Click to
+					a(href="/favorites") view your favorites.
+			else
+				span.floatright 
+					a(href="/login") Log in or register
 
 		block content
 
