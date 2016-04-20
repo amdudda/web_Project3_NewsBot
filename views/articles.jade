@@ -1,6 +1,15 @@
 .wrapper
 		for newsItem in headlines
-			p.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 
+			// if user logged in, show which ones are marked as favorites
+			p
+			if user
+				if newsItem in user.favorites
+					img(src="/images/sm-yellow-star.jpg" alt="In your favorites" id="img_#{newsItem._id}")
+				else
+					img(src="/images/sm-gray-star.jpg" alt="Not in your favorites" )
+			else 
+				img(src="")
+			span.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 
 				a(href="#{newsItem.webUrl}" id="#{newsItem._id}") #{newsItem.webTitle}
 				span &nbsp;[ #{newsItem.source} ]
 				div(class="articleSummary" id="as#{newsItem._id}")
@@ -10,3 +19,5 @@
 						p (No summary available.)
 
 	script(src="/javascripts/summaries.js" type="text/javascript")
+
+	// star image adapted from one found at http://www.clipartbest.com/picture-of-small-star
