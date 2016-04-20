@@ -229,8 +229,8 @@ function parseNytData(myData) {
 		// remove items outside our time window.
 		var itemTimestamp = new Date(myNews.pub_date);
 		if (itemTimestamp >= timeInterval) {
-			var itemDate = itemTimestamp.substring(0,10);
-			var itemTime = itemTimestamp.substring(11,16);
+			var itemDate = itemTimestamp.toISOString().substring(0,10);
+			var itemTime = itemTimestamp.toISOString().substring(11,16);
 			var myItemInfo = { 
 				'source': 'NYT',
 				'webUrl': myNews.web_url, 

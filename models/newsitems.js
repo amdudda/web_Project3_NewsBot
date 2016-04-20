@@ -28,7 +28,7 @@ var newsSchema = new Schema({
 	'itemDate': String,  // extracted from timeStamp
 	'itemTime': String,  // extracted from timeStamp
 	'summary': String  // NYT abstract or Bing summary
-})
+});
 
 var NewsItem = mongoose.model("NewsItem", newsSchema);
 
