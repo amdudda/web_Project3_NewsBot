@@ -3,4 +3,7 @@ extends layout
 block content
 	h2 Your favorite articles
 
-	include articles
+	if (headlines.length > 0)
+		include articles
+	else
+		p You have no favorites yet!

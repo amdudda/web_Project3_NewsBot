@@ -3,13 +3,26 @@ extends layout
 block content
 	h2 Login to view favorites
 
-	form(id="login" name="login" action="/login")
+	form(id="login" name="login" action="/login" method="post")
 		label Username
-		input#username(type="text" name="username")
+		input#username(type="text" name="username" required)
 		br
 		label Password
-		input#password(type="password" name="password")
+		input#password(type="password" name="password" required)
 		// we want to hash the pwd so that it doesn't go over in plaintext
 		br
-		button#login(name="login" value="login")
-		button#signup(name="signup" value="signup")
+		button#login(type="submit" name="login" value="login") Log In...
+
+	h2 Or register to create an account
+	form(id="login" name="login" action="/signup" method="post")
+		label Display Name
+		input#fullname(type="text" name="fullname" required)
+		br
+		label Username
+		input#username(type="text" name="username" required)
+		br
+		label Password
+		input#password(type="password" name="password" required)
+		// we want to hash the pwd so that it doesn't go over in plaintext
+		br
+		button#signup(type="submit" name="signup" value="signup") Register!

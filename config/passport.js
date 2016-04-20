@@ -80,12 +80,12 @@ module.exports = function(passport) {
 		newUser.fullname = req.body.fullname;
         newUser.local.username = username;
         newUser.local.password = newUser.generateHash(password);
-		newUser.tasks = [];  // empty, we assume new user has no tasks yet!
-		console.log(JSON.stringify(newUser));		
+		newUser.favorites = [];  // empty, we assume new user has no favorites yet!
+		//console.log(JSON.stringify(newUser));		
 
 		newUser.save(function (err) {
-			console.log("newuser 2:");
-			console.log(JSON.stringify(newUser));
+			//console.log("newuser 2:");
+			//console.log(JSON.stringify(newUser));
           if (err) {
 			console.log("error happens here");
             throw err;

@@ -3,12 +3,14 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 var mongoose = require('mongoose');
+var passport = require('passport');
 
 // database connection
-var db = mongoose.connect('mongodb://localhost:27017/transnews');
+//var db = mongoose.connect('mongodb://localhost:27017/transnews');
 
 // data model for news items
 var NewsItems = require('../models/newsitems.js');
+var User = require('../models/user.js');
 
 var curDateStamp;
 	var twentyfourHours;
@@ -40,6 +42,41 @@ router.get('/about',function(req,res,next){
 router.get('/search',function(req,res,next){
 	res.render('search', { title: myTitle});
 });
+
+/* GET login/signup page */
+router.get('/login',function(req,res,next){
+	res.render('login', { title: myTitle});
+});
+
+/* GET favorites page */
+router.get('/favorites',function(req,res,next){
+	console.log("loading favorites...");
+	console.log(req.body);
+	var userFaves = req.body.favorites;
+	res.render('favorites', { title: myTitle, headlines: userFaves});
+});
+
+/*
+ * post SIGNUP - called when user cliks the signup button on form
+ * calls passport.authenticate with args
+ * -- what to do on success
+ * -- what to do on failure
+ * -- whether to display flash messages to user
+ */
+router.post('/signup', passport.authenticate('local-signup', {
+	successRedirect: '/favorites',
+	failureRedirect: '/login',
+	failureFlash: true
+}));
+
+/* POST login - called when user clicks login button
+ * similar to signup, except w/ local-login
+ */
+router.post('/login', passport.authenticate('local-login', {
+	successRedirect: '/favorites',
+	failureRedirect: '/login',
+	failureFlash: true
+}));
 
 /* use GET to fetch and show Archive search results */
 router.get('/searchArchive',function(req,res,next){
