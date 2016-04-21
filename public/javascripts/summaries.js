@@ -20,3 +20,4 @@ for (var i=0; i<allSummaries.length; i++){
 		document.getElementById("as"+this.id).style.display = "none"; 
 	} );
 }
+

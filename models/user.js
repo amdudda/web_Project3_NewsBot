@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');  // lets me hash user passwords
 var NewsItem = require('./newsitems.js');
+var ObjectID = Schema.ObjectId;
 
 // my user schema
 var userSchema = new Schema({
@@ -20,7 +21,7 @@ var userSchema = new Schema({
 		default: Date.now() 
 	},
 
-	favorites: [NewsItem] // an array of the user's favorite news items
+	favorites: [NewsItem.schema] // an array of the user's favorite news items
 });
 
 // copypasta from favecolors exercise in class

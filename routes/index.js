@@ -102,7 +102,7 @@ router.get('/searchArchive',function(req,res,next){
 		qParams = { timeStamp: { $gte : date1, $lte : date2 } };
 		console.log(qParams);
 	} else if (qText == "before") {
-		console.log("be-foooooore! *golf club swings*")
+		//console.log("be-foooooore! *golf club swings*")
 		qText += " " + myQuery.firstdate;
 		qParams = { timeStamp: { $lt : date1 } };
 	} else if (qText == "after") {  // after

@@ -30,6 +30,4 @@ var newsSchema = new Schema({
 	'summary': String  // NYT abstract or Bing summary
 });
 
-var NewsItem = mongoose.model("NewsItem", newsSchema);
-
-module.exports=NewsItem;
+module.exports = mongoose.model("NewsItem", newsSchema);
