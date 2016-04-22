@@ -35,6 +35,7 @@ router.param("article_id", function(req, res, next, articleId) {
         if (err) {
             //res.render("favorites", { msg: "unable to find article", "error": error});
 			console.log("error finding article by id:" + err);
+			// TODO set response to 304 "not modified" and unable to find the article
         }
         req.article = article;
         return next();
@@ -49,19 +50,20 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 	User.findById( req.user._id ,function(err,user) {
 		// TODO send success/failure response.
 		if (err) {
-			console.log("unable to find user");
+			console.log("unable to find user");  // err 500 database problem
 		} else {
 			console.log(user.favorites);
+			// TODO verify we aren't adding a duplicate record to the array - shouldn't happen but who knows where the request is actually coming from, I don't want to trust that the user hasn't created their own interface or something.
 			user.favorites.push(newsitem); // push the article
 			console.log("pushed article");
 			// save the user's data
 			user.save(function(err){
 				if (err) {
-					console.log("error saving favorite");
-					res.redirect("/login");  // presumably the user need to log in again??
+					console.log("error saving favorite");  // 304 not modified
+					res.redirect("/login");  // presumably the user needs to log in again??
 				}
 				// otherwise, all a-OK and we redirect to favorites for now
-				res.redirect('/favorites');
+				res.redirect('/favorites');  // 201 created 
 			});
 		}
 	});
@@ -73,15 +75,6 @@ router.param("art_id", function(req, res, next, articleId) {
     console.log("params being extracted from URL for " + articleId);
 	req.artid = articleId;
 	return next();
-/*
-    NewsItems.findById(articleId, function(err,article) {
-        if (err) {
-            //res.render("favorites", { msg: "unable to find article", "error": error});
-			console.log("error finding article by id:" + err);
-        }
-        req.article = article;
-        return next();
-    }); */
 });
 
 /* THIS HANDLES ADDING AND REMOVING FAVORITES */
@@ -93,7 +86,7 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 	User.findById( req.user._id ,function(err,user) {
 		// TODO send success/failure response.
 		if (err) {
-			console.log("unable to find user");
+			console.log("unable to find user");  // err 500 database problem
 		} else {
 			userfavs = user.favorites;
 			//console.log(userfavs.length + " faves found");
@@ -107,11 +100,11 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 			// save the user's data
 			user.save(function(err){
 				if (err) {
-					console.log("error saving updated data");
+					console.log("error saving updated data");  // err 500 database problem
 					res.redirect("/login");  // presumably the user need to log in again??
 				}
 				// otherwise, all a-OK and we redirect to favorites for now
-				res.redirect('/favorites');
+				res.redirect('/favorites');  // success 200 OK
 			});
 		}
 	});
