@@ -104,10 +104,12 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 			user.save(function(err){
 				if (err) {
 					console.log("error saving updated data");  //TODO err 500 database problem
-					res.redirect("/login");  // presumably the user need to log in again??
+					//res.redirect("/login");  // presumably the user need to log in again??
+					res.status(500).send("error saving updated data")
 				}
 				// otherwise, all a-OK and we redirect to favorites for now
-				res.redirect('/favorites');  // TODO success 200 OK
+				//res.redirect('/favorites');  // TODO success 200 OK
+				res.status(200).send("success");
 			});
 		}
 	});
