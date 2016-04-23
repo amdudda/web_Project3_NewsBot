@@ -3,18 +3,17 @@
 			- ufavs = []
 			- for fav in user.favorites
 				- ufavs.push(""+fav._id)
-			- console.log(ufavs.length + " favorites found")
-			- console.log(ufavs)
+			// - console.log(ufavs.length + " favorites found")
+			// - console.log(ufavs)
 		for newsItem in headlines
 			// if user logged in, show which ones are marked as favorites
 			p
 			if user
-				- console.log("article id: " + newsItem._id)
+				// - console.log("article id: " + newsItem._id)
 				if (ufavs.indexOf(""+newsItem._id) != -1)
-					- console.log("foundone!")
-					img(src="/images/sm-yellow-star.jpg" alt="In your favorites" id="img_#{newsItem._id}")
+					img.star(src="/images/sm-yellow-star.jpg" alt="Click to remove from favorites" id="img_#{newsItem._id}")
 				else
-					img(src="/images/sm-gray-star.jpg" alt="Not in your favorites" )
+					img.star(src="/images/sm-gray-star.jpg" alt="Click to add to favorites" id="img_#{newsItem._id}")
 			else 
 				img(src="")
 			span.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 

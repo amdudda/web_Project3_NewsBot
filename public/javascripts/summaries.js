@@ -21,3 +21,17 @@ for (var i=0; i<allSummaries.length; i++){
 	} );
 }
 
+// grab the stars and add event listener that will eventually call an ajax request
+var allStars = document.getElementsByClassName("star");
+
+for (var s = 0; s<allStars.length; s++){
+	var myStar = allStars[s];
+	var starId = myStar.id;
+	//var link = document.getElementById(starId);
+	myStar.addEventListener("click", function() {
+		var artID = this.id.substring(4);
+		var whichStar = "grey";  // determine which star has been selected
+		if (this.src == "http://localhost:3000/images/sm-yellow-star.jpg") whichStar="yellow";
+		console.log("articleID: " + artID + "\nstar: " + whichStar);
+	});
+}
