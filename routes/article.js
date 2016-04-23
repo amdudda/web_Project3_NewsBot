@@ -52,18 +52,21 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 		if (err) {
 			console.log("unable to find user");  // err 500 database problem
 		} else {
-			console.log(user.favorites);
-			// TODO verify we aren't adding a duplicate record to the array - shouldn't happen but who knows where the request is actually coming from, I don't want to trust that the user hasn't created their own interface or something.
-			user.favorites.push(newsitem); // push the article
-			console.log("pushed article");
-			// save the user's data
+			user.favorites.addToSet(newsitem); // push the article - add to set prevents duplicates
+			// save the updated data
 			user.save(function(err){
 				if (err) {
-					console.log("error saving favorite");  // 304 not modified
-					res.redirect("/login");  // presumably the user needs to log in again??
-				}
+					if (err.code == 16837) {
+						// TODO set response to 304 not modified - this error happens if what was added was already in the array
+					}
+					console.log("error [" + err.code + "] saving favorite: " + err);  
+					// TODO set response to 500 server error
+					// we can just fix the star on the client side
+				} else {
 				// otherwise, all a-OK and we redirect to favorites for now
-				res.redirect('/favorites');  // 201 created 
+					console.log("saved article");
+					res.redirect('/favorites');  // TODO response is 201 created 
+				}
 			});
 		}
 	});
@@ -100,11 +103,11 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 			// save the user's data
 			user.save(function(err){
 				if (err) {
-					console.log("error saving updated data");  // err 500 database problem
+					console.log("error saving updated data");  //TODO err 500 database problem
 					res.redirect("/login");  // presumably the user need to log in again??
 				}
 				// otherwise, all a-OK and we redirect to favorites for now
-				res.redirect('/favorites');  // success 200 OK
+				res.redirect('/favorites');  // TODO success 200 OK
 			});
 		}
 	});
