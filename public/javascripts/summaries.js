@@ -84,7 +84,7 @@ updateFaves(callback).onreadystatechange=function(){
     if (updateFaves.readyState==4){
 		console.log("status: " + updateFaves.status);
 		if (updateFaves.status == 200 || updateFaves.status == 201 || updateFaves.status == 304) {
-			// these are 200 = removed, 201 = added, 304 = duplicate found
+			// these are 200 = removed, 201 = added, 304 = tried to add, duplicate found
 			callback;  // this lets me pass the response to a response handler
 		} else if (updateFaves.status == 500) {
 			alert("Unable to update favorites due to database error.");  // this lets me pass the response to a response handler
