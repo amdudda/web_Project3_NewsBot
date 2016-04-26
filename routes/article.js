@@ -51,6 +51,10 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 		// TODO send success/failure response.
 		if (err) {
 			console.log("unable to find user");  // err 500 database problem
+			//res.status(500).send("database error: unable to find user");
+			//presumably user not logged in, redirect to login page
+			req.logout();  // force user logout if possible
+			res.redirect('/login');  // then send user back to login page.
 		} else {
 			user.favorites.addToSet(newsitem); // push the article - add to set prevents duplicates
 			// save the updated data
@@ -58,14 +62,18 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 				if (err) {
 					if (err.code == 16837) {
 						// TODO set response to 304 not modified - this error happens if what was added was already in the array
-					}
+						res.status(304).send("duplicate record");
+					} else {
 					console.log("error [" + err.code + "] saving favorite: " + err);  
 					// TODO set response to 500 server error
 					// we can just fix the star on the client side
+						res.status(500).send("misc error on server");
+					}
 				} else {
 				// otherwise, all a-OK and we redirect to favorites for now
 					console.log("saved article");
-					res.redirect('/favorites');  // TODO response is 201 created 
+					//res.redirect('/favorites');  // TODO response is 201 created 
+					res.status(201).send("saved article to favorites");
 				}
 			});
 		}
@@ -90,6 +98,8 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 		// TODO send success/failure response.
 		if (err) {
 			console.log("unable to find user");  // err 500 database problem
+			req.logout();  // force user logout if possible
+			res.redirect('/login');  // then send user back to login page.
 		} else {
 			userfavs = user.favorites;
 			//console.log(userfavs.length + " faves found");
