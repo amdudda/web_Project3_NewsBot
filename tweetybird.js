@@ -45,12 +45,12 @@ var timeInterval;
 fetchNewsData(postAndSave);
 
 function postAndSave(){
-	storeNewsItems(sendTweets());
+	storeNewsItems(sendTweets);
 };
 
 // a function to tweet data
 function sendTweets() {
-	//console.log(newsArray);
+	console.log("tweet?");
 	var n = 0;
 	var threeMinutes = 3*60*1000;
 	// I want to send space my tweets out a couple minutes apart?
@@ -79,20 +79,24 @@ function sendTweets() {
 		}, 1000);
 	}
 	else {
-		// jut close my connection
+		// just close my connection
 		mongoose.connection.close();
 	}
 };
 
 // a function to add data to database
 function storeNewsItems(callback){
+	console.log("storing " + newsArray.length + " items");
 	tweetables = []; // clear the array in case there's lingering data...
 	// iterate through newsArray and add each item to the database and to tweetables array
-	for (i=0; i<newsArray.length; i++) {
+	for (i=0; i<newsArray.length; i++) 
+	{
 		var article = newsArray[i];
 		var newNewsItem = NewsItem(article);
-		//console.log(JSON.stringify(newNewsItem));
-		newNewsItem.save(function(err){
+		//var consolestring = "item # " + i + ":\n" + JSON.stringify(newNewsItem);
+		//console.log(consolestring);
+		newNewsItem.save( function(err) {
+			console.log("saving article #" + i);
 			if (err) 
 			{
 				if (err.name == "ValidationError") 
@@ -116,13 +120,13 @@ function storeNewsItems(callback){
 				//console.log(newNewsItem);
 				tweetables.push(newNewsItem);
 				console.log("Added " + tweetables.length + "-th news item!");
+				// put a callback here to start tweeting after the data has been stored
+				if (i == newsArray.length - 1) {
+					console.log(tweetables.length + " new items found");
+					callback;
+				}
 			}
-		});
-		// put a callback here to start tweeting after the data has been stored
-		if (i == newsArray.length -1) {
-			console.log(tweetables.length + " new items found");
-			callback;
-		}
+		}); 
 	}
 	
 };
