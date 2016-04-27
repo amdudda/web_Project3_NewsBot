@@ -13,6 +13,7 @@ var flash = require('connect-flash');
 // set up database connection
 var mongoose = require('mongoose');
 var mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/transnews';
+console.log('mongodb url set to: ' + mongoUrl.substring(0,15)); // DON'T send the whole thing plaintext, eeek!
 var db = mongoose.connect(mongoUrl);
 
 // site routes
