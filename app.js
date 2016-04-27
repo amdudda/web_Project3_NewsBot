@@ -12,7 +12,8 @@ var flash = require('connect-flash');
 
 // set up database connection
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost:27017/transnews');
+var mongoUrl = process.env.MONGOLAB_URI ? process.env.MONGOLAB_URI : 'mongodb://localhost:27017/transnews';
+var db = mongoose.connect(mongoUrl);
 
 // site routes
 var routes = require('./routes/index');
