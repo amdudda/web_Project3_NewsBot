@@ -30,21 +30,22 @@ var NewsItem = require('./models/newsitems.js');
 // global variables
 var searchterm = "transgender"; // our search term
 var newsArray = [];  // array to store news items
+var tweetables = []; // array storing only new news items
 var GuardianDone = false;  // these help the app decide when all results have been processed
 var nytDone = false;
 var BingDone = false;
 var curDateStamp;
 	var threeDays = 3*24*60*60*1000;
-	var twentfourHours = 24*60*60*1000;
+	var twentyfourHours = 24*60*60*1000;
 	var fourHours = 4*60*60*1000;
+	var eightHours = 8*60*60*1000;  // because Heroku only lets you have 3 scheduled tasks.
 var timeInterval;
 
 // fetch data, then tweet it in callback.
 fetchNewsData(postAndSave);
 
 function postAndSave(){
-	sendTweets();
-	storeNewsItems();
+	storeNewsItems(sendTweets());
 };
 
 // a function to tweet data
@@ -53,53 +54,75 @@ function sendTweets() {
 	var n = 0;
 	var threeMinutes = 3*60*1000;
 	// I want to send space my tweets out a couple minutes apart?
-	//for (var n=0; n<newsArray.length; n++) {
-	setInterval( function(){
-		// tweet our news item
-		newsItem = newsArray[n];
-		var myTweet = "[" + newsItem.source + "] ";
-		myTweet += newsItem.webTitle;
-		myTweet = myTweet.substring(0,119) + "… ";
-		myTweet += newsItem.webUrl;
-		console.log("#" + n + ") " + myTweet);
-		/* TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
-		client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
-			  if (error) throw error;
-			  console.log(tweet);  // Tweet body. 
-			  console.log(response);  // Raw response object. 
-		});
-		*/
-		n++; // increment to next news item.
-		// stop the timer once we've tweeted everything.
-		if (n >= newsArray.length) {
-			clearInterval(this); 
-			mongoose.connection.close();
-		}
-	}, 1000);
-	//}
+	// only tweet if there's stuff to tweet
+	if (tweetables.length > 0){	
+		setInterval( function(){
+			// tweet our news item
+			newsItem = tweetables[n];
+			var myTweet = "[" + newsItem.source + "] ";
+			myTweet += newsItem.webTitle;
+			myTweet = myTweet.substring(0,119) + "… ";
+			myTweet += newsItem.webUrl;
+			console.log("#" + n + ") " + myTweet);
+			/* TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
+			client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
+				  if (error) throw error;
+				  console.log(tweet);  // Tweet body. 
+				  console.log(response);  // Raw response object. 
+			});
+			*/
+			n++; // increment to next news item.
+			// stop the timer once we've tweeted everything.
+			if (n >= newsArray.length) {
+				clearInterval(this); 
+			}
+		}, 1000);
+	}
+	else {
+		// jut close my connection
+		mongoose.connection.close();
+	}
 };
 
 // a function to add data to database
-function storeNewsItems(){
-	// iterate through newsArray and add each item to the database
+function storeNewsItems(callback){
+	tweetables = []; // clear the array in case there's lingering data...
+	// iterate through newsArray and add each item to the database and to tweetables array
 	for (i=0; i<newsArray.length; i++) {
 		var article = newsArray[i];
 		var newNewsItem = NewsItem(article);
+		//console.log(JSON.stringify(newNewsItem));
 		newNewsItem.save(function(err){
-			if (err) {
-				if (err.name == "ValidationError") {
+			if (err) 
+			{
+				if (err.name == "ValidationError") 
+				{
 					console.log('Invalid data in record #'+ i + ':\n' + article);
 					console.log('You may need to add this record manually.');
 				}
-				if (err.code == 11000) {
+				else if (err.code == 11000) 
+				{
 					console.log('An article already exists in the database. Skipping the record.');
 				}
-				else console.log('An unexpected error occurred:\n' +err);  // some other error happened we haven't foreseen
+				else 
+				{
+					// some other error happened we haven't foreseen
+					console.log('An unexpected error occurred:\n' +err);  
+				}
 			}
-			else {
-				console.log("Added news item!");
+			else 
+			{
+				// news item is tweetable, push it to the tweetables array
+				//console.log(newNewsItem);
+				tweetables.push(newNewsItem);
+				console.log("Added " + tweetables.length + "-th news item!");
 			}
 		});
+		// put a callback here to start tweeting after the data has been stored
+		if (i == newsArray.length -1) {
+			console.log(tweetables.length + " new items found");
+			callback;
+		}
 	}
 	
 };
@@ -112,7 +135,7 @@ function fetchNewsData(callback) {
 
 	newsArray = [];  // clear the array before fetching data
 	curDateStamp = new Date();
-	timeInterval = new Date(curDateStamp - fourHours);
+	timeInterval = new Date(curDateStamp - eightHours);
 	fetchGuardianData();
 	fetchNYTData();
 	fetchBingData();
@@ -283,7 +306,7 @@ function fetchBingData(){
 
 function parseBingData(newsItems){
 	//console.log('bing data:');
-	//console.log(newsItems[0]);
+	console.log(newsItems.length + " Bing articles found");
 	for (var i=0; i<newsItems.length; i++) {
 		var newsItem = newsItems[i];
 		var headline = newsItem.Title;
