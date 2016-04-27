@@ -1,5 +1,6 @@
 .wrapper
 		if user
+			| <p><i>Click on a grey star to add an article to your favorites, or a yellow star to remove it from your favorites.</i></p>
 			- ufavs = []
 			- for fav in user.favorites
 				- ufavs.push(""+fav._id)

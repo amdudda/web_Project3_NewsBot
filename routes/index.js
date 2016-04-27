@@ -19,7 +19,7 @@ var myTitle = "Transgender News Pulse";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	console.log(req.user);
+	//console.log(req.user);
 	newsArray = [];  // clear the array before fetching data
 	curDateStamp = new Date();
 	twentyfourHours = 24*60*60*1000;
