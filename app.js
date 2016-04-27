@@ -43,8 +43,8 @@ app.use(passport.session());
 app.use(flash());
 
 //DB
-var url = 'mongodb://localhost:27017/todo';
-mongoose.createConnection(url);
+//var url = 'mongodb://localhost:27017/todo';
+mongoose.createConnection(mongoUrl);
 //TODO error handler
 
 /*End of stuff for passport. */
