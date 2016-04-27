@@ -66,40 +66,45 @@ for (var s = 0; s<allStars.length; s++){
 		if (this.src == yellowStar) {  // remove
 			console.log("removing");
 			var myUrl = baseUrl + "/remove/" + artID;
-			updateFaves(reactToResponse(this)).open("GET", myUrl, true);
-			//updateFaves.send(null);
+			changeFave(this,myUrl);
 		} else { // add
 			console.log("adding");
 			var myUrl = baseUrl + "/add/" + artID;
-			updateFaves(reactToResponse(this)).open("GET", myUrl, true);  
-			//updateFaves.send(null);
+			changeFave(this,myUrl);
 		}
 	});
 }
 
-// TODO figure out how to catch response and act on it
-// function to send ajax request to remove a favorite - return the error code for handling
-updateFaves = new AjaxRequest();
-updateFaves(callback).onreadystatechange=function(){
-    if (updateFaves.readyState==4){
-		console.log("status: " + updateFaves.status);
-		if (updateFaves.status == 200 || updateFaves.status == 201 || updateFaves.status == 304) {
-			// these are 200 = removed, 201 = added, 304 = tried to add, duplicate found
-			callback;  // this lets me pass the response to a response handler
-		} else if (updateFaves.status == 500) {
-			alert("Unable to update favorites due to database error.");  // this lets me pass the response to a response handler
-		} else {
-			alert("Something broke, but I'm not sure what or why.  Try logout & re-login?");
-		}
-	} else {
-		alert("An error has occured making the request");
+function changeFave(star,myUrl){
+	// TODO figure out how to catch response and act on it
+	// function to send ajax request to remove a favorite - return the error code for handling
+	updateFaves = new AjaxRequest();
+	updateFaves.onreadystatechange=function(){
+		if (updateFaves.readyState==4){
+			var myStatus = updateFaves.status;
+			console.log("status: " + myStatus);
+			if (myStatus == 200 || myStatus == 201 || myStatus == 304) {
+				// these are 200 = removed, 201 = added, 304 = tried to add, duplicate found
+				reactToResponse(star);  // this lets me pass the response to a response handler
+			} else if (myStatus == 500) {
+				alert("Unable to update favorites due to database error.");  // this lets me pass the response to a response handler
+			} else {
+				alert("Something broke, but I'm not sure what or why.  Try logout & re-login?");
+			}
+		} 
+		/*  only need this when debugging		
+		else {
+			alert("An error has occured making the request");
+		}  */
 	}
+	updateFaves.open("GET", myUrl, true);
+	updateFaves.send(null);
 }
 
 
 function reactToResponse(star){
-	console.log("reacting to response");
-	console.log("still working with: " + star.src);
+	//console.log("reacting to response");
+	//console.log("still working with: " + star.src);
 	// switch the colors of the stars.
 	if (star.src == yellowStar) { star.src = greyStar; }
 	else { star.src = yellowStar; }
