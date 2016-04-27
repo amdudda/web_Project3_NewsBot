@@ -25,6 +25,7 @@ console.log('successfully set port');
 
 var server = http.createServer(app);
 
+console.log('created server');
 /**
  * Listen on provided port, on all network interfaces.
  */
