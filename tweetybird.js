@@ -50,7 +50,7 @@ function postAndSave(){
 
 // a function to tweet data
 function sendTweets() {
-	console.log("tweet?");
+	console.log("tweet " + tweetables.length + " articles?");
 	var n = 0;
 	var threeMinutes = 3*60*1000;
 	// I want to send space my tweets out a couple minutes apart?
@@ -58,7 +58,8 @@ function sendTweets() {
 	if (tweetables.length > 0){	
 		setInterval( function(){
 			// tweet our news item
-			newsItem = tweetables[n];
+			newsItem = NewsItem(tweetables[n]);
+			console.log(newsItem);
 			var myTweet = "[" + newsItem.source + "] ";
 			myTweet += newsItem.webTitle;
 			myTweet = myTweet.substring(0,119) + "… ";
@@ -73,8 +74,10 @@ function sendTweets() {
 			*/
 			n++; // increment to next news item.
 			// stop the timer once we've tweeted everything.
-			if (n >= newsArray.length) {
+			if (n >= tweetables.length) {
 				clearInterval(this); 
+				// and close my connection when done
+				mongoose.connection.close();
 			}
 		}, 1000);
 	}
@@ -94,9 +97,10 @@ function storeNewsItems(callback){
 		var article = newsArray[i];
 		var newNewsItem = NewsItem(article);
 		//var consolestring = "item # " + i + ":\n" + JSON.stringify(newNewsItem);
-		//console.log(consolestring);
+		//console.log(newsArray.length);
+		var processed = 0; // total number of articles processed so we know when to trigger the callback.
 		newNewsItem.save( function(err) {
-			console.log("saving article #" + i);
+			//console.log("saving article #" + i);
 			if (err) 
 			{
 				if (err.name == "ValidationError") 
@@ -117,16 +121,19 @@ function storeNewsItems(callback){
 			else 
 			{
 				// news item is tweetable, push it to the tweetables array
-				//console.log(newNewsItem);
-				tweetables.push(newNewsItem);
-				console.log("Added " + tweetables.length + "-th news item!");
-				// put a callback here to start tweeting after the data has been stored
-				if (i == newsArray.length - 1) {
-					console.log(tweetables.length + " new items found");
-					callback;
-				}
+				// console.log("saved #" + processed);
+				tweetables.push(newsArray[processed]);
+			}	
+		
+			processed++;  // increment number of articles processed
+			// put a callback here to start tweeting after the data has been stored
+			// console.log("processed #" + processed);		
+			if (processed == newsArray.length) {
+				console.log(tweetables.length + " new items found");
+				callback();
 			}
 		}); 
+		//console.log("Added " + i + "-th news item!");
 	}
 	
 };
