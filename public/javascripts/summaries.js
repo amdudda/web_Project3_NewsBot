@@ -45,9 +45,20 @@ function AjaxRequest(){
 }
 
 // variables to represent the yellow and grey stars
-var yellowStar = "http://localhost:3000/images/sm-yellow-star.jpg";
-var greyStar = "http://localhost:3000/images/sm-gray-star.jpg";
-var ajaxResp;
+var yellowStar;
+var greyStar;
+var baseUrl;
+var production = true;
+if (production) {
+	yellowStar = "/images/sm-yellow-star.jpg";
+	greyStar = "/images/sm-gray-star.jpg";
+	baseUrl = "http://transnewspulse.herokuapp.com/article";
+}
+else {
+	yellowStar = "http://localhost:3000/images/sm-yellow-star.jpg";
+	greyStar = "http://localhost:3000/images/sm-gray-star.jpg";
+	baseUrl = "http://localhost:3000/article";
+}
 
 // grab the stars and add event listener that will eventually call an ajax request
 var allStars = document.getElementsByClassName("star");
@@ -55,12 +66,12 @@ var allStars = document.getElementsByClassName("star");
 for (var s = 0; s<allStars.length; s++){
 	var myStar = allStars[s];
 	var starId = myStar.id;
-	var baseUrl = "http://localhost:3000/article"
+	//var baseUrl = "http://localhost:3000/article";
 
 	myStar.addEventListener("click", function() {
 		var artID = this.id.substring(4);
 		var whichStar = "grey";  // determine which star has been clicked
-		if (this.src == yellowStar) whichStar="yellow";
+		// if (this.src == yellowStar) whichStar="yellow";
 		//alert("articleID: " + artID + "\nstar: " + whichStar);
 		// TODO two logical paths - if yellow, want to remove, if grey, want to add
 		if (this.src == yellowStar) {  // remove
