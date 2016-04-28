@@ -15,10 +15,10 @@ var Twitter = require('twitter');
 // Twitter API keys
 // TODO: setup account and start doing test tweeting!
 var client = new Twitter({
-  consumer_key: process.env.TNW_CONSUMER_KEY,
-  consumer_secret: process.env.TNW_CONSUMER_SECRET,
-  access_token_key: process.env.TNW_ACCESS_TOKEN_KEY,
-  access_token_secret: process.env.TNW_ACCESS_TOKEN_SECRET
+  consumer_key: process.env.TNP_CONSUMER_KEY,
+  consumer_secret: process.env.TNP_CONSUMER_SECRET,
+  access_token_key: process.env.TNP_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TNP_ACCESS_TOKEN_SECRET
 });
 
 // set up database connection
@@ -66,13 +66,14 @@ function sendTweets() {
 			myTweet = myTweet.substring(0,119) + "… ";
 			myTweet += newsItem.webUrl;
 			console.log("#" + n + ") " + myTweet);
-			/* TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
+			// TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
 			client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
 				  if (error) throw error;
-				  console.log(tweet);  // Tweet body. 
-				  console.log(response);  // Raw response object. 
+				  else console.log("tweeted article #" + n);
+				  // console.log(tweet);  // Tweet body. 
+				  // console.log(response);  // Raw response object. 
 			});
-			*/
+			
 			n++; // increment to next news item.
 			// stop the timer once we've tweeted everything.
 			if (n >= tweetables.length) {
@@ -80,7 +81,7 @@ function sendTweets() {
 				// and close my connection when done
 				mongoose.connection.close();
 			}
-		}, 1000);  //TODO set this to three minutes once Twitter testing complete!
+		}, threeMinutes);  // 60*1000 set this to three minutes once Twitter testing complete!
 	}
 	else {
 		// just close my connection
