@@ -109,7 +109,7 @@ function changeFave(star,myUrl){
 		}  */
 	}
 	updateFaves.open("GET", myUrl, true);
-	updateFaves.send(null);
+	//updateFaves.send(null);
 }
 
 
