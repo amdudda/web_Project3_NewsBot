@@ -23,7 +23,8 @@ var client = new Twitter({
 
 // set up database connection
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost:27017/transnews');
+mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/transnews';
+var db = mongoose.connect(mongoUrl);
 // connect to our database Schema
 var NewsItem = require('./models/newsitems.js');
 
@@ -59,7 +60,7 @@ function sendTweets() {
 		setInterval( function(){
 			// tweet our news item
 			newsItem = NewsItem(tweetables[n]);
-			console.log(newsItem);
+			//console.log(newsItem);
 			var myTweet = "[" + newsItem.source + "] ";
 			myTweet += newsItem.webTitle;
 			myTweet = myTweet.substring(0,119) + "… ";
@@ -79,7 +80,7 @@ function sendTweets() {
 				// and close my connection when done
 				mongoose.connection.close();
 			}
-		}, 1000);
+		}, 1000);  //TODO set this to three minutes once Twitter testing complete!
 	}
 	else {
 		// just close my connection
