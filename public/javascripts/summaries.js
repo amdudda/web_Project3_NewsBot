@@ -52,7 +52,7 @@ var production = true;
 if (production) {
 	yellowStar = "/images/sm-yellow-star.jpg";
 	greyStar = "/images/sm-gray-star.jpg";
-	baseUrl = "http://transnewspulse.herokuapp.com/article";
+	baseUrl = "https://transnewspulse.herokuapp.com/article";
 }
 else {
 	yellowStar = "http://localhost:3000/images/sm-yellow-star.jpg";
@@ -109,7 +109,7 @@ function changeFave(star,myUrl){
 		}  */
 	}
 	updateFaves.open("GET", myUrl, true);
-	//updateFaves.send(null);
+	updateFaves.send(null);
 }
 
 
