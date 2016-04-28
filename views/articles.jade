@@ -15,8 +15,6 @@
 					img.star(src="/images/sm-yellow-star.jpg" alt="Click to remove from favorites" id="img_#{newsItem._id}")
 				else
 					img.star(src="/images/sm-gray-star.jpg" alt="Click to add to favorites" id="img_#{newsItem._id}")
-			else 
-				img(src="")
 			span.articleLink #{newsItem.itemDate} at #{newsItem.itemTime}: 
 				a(href="#{newsItem.webUrl}" id="#{newsItem._id}") #{newsItem.webTitle}
 				span &nbsp;[ #{newsItem.source} ]
