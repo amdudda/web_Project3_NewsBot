@@ -20,7 +20,10 @@ var userSchema = new Schema({
 		type: Date,
 		default: Date.now() 
 	},
-
+	lastLoginDate : { 
+		type: Date,
+		default: Date.now() 
+	},
 	favorites: [NewsItem.schema] // an array of the user's favorite news items
 });
 
