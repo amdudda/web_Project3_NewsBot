@@ -11,8 +11,6 @@ for (var i=0; i<allSummaries.length; i++){
 	// get the corresponding a tag, which has an ID matching the record id
 	var link = document.getElementById(recID);
 	// add the event listeners to it
-	// TODO for some reason, each new event listener supersedes/replaces all the ones before it.
-	// why isn't it adding a new event listener with a new tag for each one?
 	link.addEventListener("mouseover", function(){ 
 		document.getElementById("as"+this.id).style.display = "block"; 
 	} );
@@ -73,7 +71,7 @@ for (var s = 0; s<allStars.length; s++){
 		var whichStar = "grey";  // determine which star has been clicked
 		// if (this.src == yellowStar) whichStar="yellow";
 		//alert("articleID: " + artID + "\nstar: " + whichStar);
-		// TODO two logical paths - if yellow, want to remove, if grey, want to add
+		// two logical paths - if yellow, want to remove, if grey, want to add
 		if (this.src == yellowStar) {  // remove
 			console.log("removing");
 			var myUrl = baseUrl + "/remove/" + artID;
@@ -87,8 +85,8 @@ for (var s = 0; s<allStars.length; s++){
 }
 
 function changeFave(star,myUrl){
-	// TODO figure out how to catch response and act on it
-	// function to send ajax request to remove a favorite - return the error code for handling
+	// catch response and act on it
+	// function to send ajax request to add/remove a favorite - return the error code for handling
 	updateFaves = new AjaxRequest();
 	updateFaves.onreadystatechange=function(){
 		if (updateFaves.readyState==4){
@@ -115,7 +113,7 @@ function changeFave(star,myUrl){
 
 function reactToResponse(star){
 	//console.log("reacting to response");
-	console.log("working with: " + star.src);
+	//console.log("working with: " + star.src);
 	// switch the colors of the stars.
 	if (star.src == yellowStar) { star.src = greyStar; }
 	else { star.src = yellowStar; }

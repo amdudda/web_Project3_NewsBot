@@ -13,7 +13,6 @@ var Bing = require('node-bing-api')({ accKey: BING_APIKEY });
 var Twitter = require('twitter');
 
 // Twitter API keys
-// TODO: setup account and start doing test tweeting!
 var client = new Twitter({
   consumer_key: process.env.TNP_CONSUMER_KEY,
   consumer_secret: process.env.TNP_CONSUMER_SECRET,
@@ -66,22 +65,22 @@ function sendTweets() {
 			myTweet = myTweet.substring(0,119) + "… ";
 			myTweet += newsItem.webUrl;
 			console.log("#" + n + ") " + myTweet);
-			// TODO: TURN THIS ON AFTER I HAVE CREATED TWITTER ACCT
+			// This sends my tweets to Twitter
 			client.post('statuses/update', {status: myTweet},  function(error, tweet, response){
 				  if (error) throw error;
 				  else console.log("tweeted article #" + n);
 				  // console.log(tweet);  // Tweet body. 
 				  // console.log(response);  // Raw response object. 
 			});
-			
-			n++; // increment to next news item.
+			// increment to next news item.
+			n++; 
 			// stop the timer once we've tweeted everything.
 			if (n >= tweetables.length) {
 				clearInterval(this); 
 				// and close my connection when done
 				mongoose.connection.close();
 			}
-		}, threeMinutes);  // 60*1000 set this to three minutes once Twitter testing complete!
+		}, threeMinutes);  
 	}
 	else {
 		// just close my connection

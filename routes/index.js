@@ -132,7 +132,7 @@ function getTextSearchParams(formData){
 	var findIn = formData.fieldToSearch;
 	var qString;
 	var qParm = {};
-	// TODO create a unified index and search both text and headlines.
+	// this uses a unified index to search both text and headlines.
 	// three types of searches - phrase, boolean OR, and pseudowildcard
 	if (type == "exact") {
 		qString=  "\"" + formData.searchString + "\"";  // trying to get it to pass '\"coffee shop\"' or whatever

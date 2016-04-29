@@ -42,13 +42,13 @@ router.param("article_id", function(req, res, next, articleId) {
     });
 });
 
-/* THIS HANDLES ADDING AND REMOVING FAVORITES */
+/* THIS HANDLES ADDING FAVORITES */
 router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 	console.log(req.user._id);
 	var newsitem = req.article;
 	// add article to user's favorites
 	User.findById( req.user._id ,function(err,user) {
-		// TODO send success/failure response.
+		// send success/failure response.
 		if (err) {
 			console.log("unable to find user");  // err 500 database problem
 			//res.status(500).send("database error: unable to find user");
@@ -61,18 +61,18 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 			user.save(function(err){
 				if (err) {
 					if (err.code == 16837) {
-						// TODO set response to 304 not modified - this error happens if what was added was already in the array
+						// set response to 304 not modified - this error happens if what was added was already in the array
 						res.status(304).send("duplicate record");
 					} else {
 					console.log("error [" + err.code + "] saving favorite: " + err);  
-					// TODO set response to 500 server error
+					// set response to 500 server error
 					// we can just fix the star on the client side
 						res.status(500).send("misc error on server");
 					}
 				} else {
 				// otherwise, all a-OK and we redirect to favorites for now
 					console.log("saved article");
-					//res.redirect('/favorites');  // TODO response is 201 created 
+					// send 201 created 
 					res.status(201).send("saved article to favorites");
 				}
 			});
@@ -88,16 +88,16 @@ router.param("art_id", function(req, res, next, articleId) {
 	return next();
 });
 
-/* THIS HANDLES ADDING AND REMOVING FAVORITES */
+/* THIS HANDLES REMOVING FAVORITES */
 router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 	console.log(req.user._id);
 	//var newsitem = req.article;
 	var artID = req.artid;
 	// add article to user's favorites
 	User.findById( req.user._id ,function(err,user) {
-		// TODO send success/failure response.
+		// send success/failure response.
 		if (err) {
-			console.log("unable to find user");  // err 500 database problem
+			console.log("unable to find user");
 			req.logout();  // force user logout if possible
 			res.redirect('/login');  // then send user back to login page.
 		} else {
@@ -113,12 +113,12 @@ router.get('/remove/:art_id',isLoggedIn, function(req,res,next){
 			// save the user's data
 			user.save(function(err){
 				if (err) {
-					console.log("error saving updated data");  //TODO err 500 database problem
-					//res.redirect("/login");  // presumably the user need to log in again??
+					console.log("error saving updated data");  
+					// send err 500 database problem
 					res.status(500).send("error saving updated data")
 				}
 				// otherwise, all a-OK and we redirect to favorites for now
-				//res.redirect('/favorites');  // TODO success 200 OK
+				// send success 200 OK
 				res.status(200).send("success");
 			});
 		}
