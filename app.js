@@ -19,7 +19,7 @@ var db = mongoose.connect(mongoUrl);
 
 // site routes
 var routes = require('./routes/index');
-//var users = require('./routes/users');
+var users = require('./routes/users');
 var article = require('./routes/article');
 
 var app = express();
