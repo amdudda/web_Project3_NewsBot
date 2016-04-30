@@ -25,7 +25,6 @@ var app = express();
 
 // going to try to force ssl encryption here
 // cadged from http://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
-var env = process.env.NODE_ENV || 'development';
 
  var forceSsl = function (req, res, next) {
     if (req.headers['x-forwarded-proto'] !== 'https') {
@@ -34,9 +33,8 @@ var env = process.env.NODE_ENV || 'development';
     return next();
  };
 
-if (env === 'production') {
-        app.use(forceSsl);
-    }
+app.use(forceSsl);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
