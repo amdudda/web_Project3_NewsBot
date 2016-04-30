@@ -18,10 +18,25 @@ var db = mongoose.connect(mongoUrl);
 
 // site routes
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 var article = require('./routes/article');
 
 var app = express();
+
+// going to try to force ssl encryption here
+// cadged from http://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
+var env = process.env.NODE_ENV || 'development';
+
+ var forceSsl = function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next();
+ };
+
+if (env === 'production') {
+        app.use(forceSsl);
+    }
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +44,8 @@ app.set('view engine', 'jade');
 
 /* This is for passport */
 app.use(session({
-  secret: 'replace with some long random number'
+  //secret: 'replace with some long random number'
+  secret: '14E16991F7FF7F170151D31FF6C8BB20314FE5ECC56D944F0415D3B44B5B3DD6'
 }));
 
 require('./config/passport')(passport);
