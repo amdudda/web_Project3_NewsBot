@@ -27,7 +27,7 @@ var app = express();
 // cadged from http://stackoverflow.com/questions/7185074/heroku-nodejs-http-to-https-ssl-forced-redirect
 
 /* At the top, with other redirect methods before other routes */
-app.get('*',function(req,res,next){
+app.use('*',function(req,res,next){
   if(req.headers['x-forwarded-proto']!='https')
     res.redirect('https://'+req.url)
   else
