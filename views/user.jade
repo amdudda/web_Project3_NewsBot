@@ -1,0 +1,22 @@
+extends layout
+
+block content
+	h2 Welcome, #{user.fullname}!
+
+	h3 This is the user account management page.
+
+	p You can change your display name here:
+
+	form(name="changeName" id="changename" action="/user/changename" method="post") 
+		p (Under construction)
+		input(type="text" name="fullname" id="fullname" value="#{user.fullname}")
+		span  &nbsp&nbsp;
+			button(type="submit" name="submitName" id="submitName") Update
+		if nameerror
+			span
+				i Database error: #{nameerror}.  Please try again.
+
+	p Or you can reset your password here:
+
+	p (Under construction)
+
