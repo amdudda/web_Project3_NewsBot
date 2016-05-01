@@ -8,15 +8,26 @@ block content
 	p You can change your display name here:
 
 	form(name="changeName" id="changename" action="/user/changename" method="post") 
+		p 
+			input(type="text" name="fullname" id="fullname" value="#{user.fullname}")
+			span  &nbsp&nbsp;
+				button(type="submit" name="submitName" id="submitName") Update
+			if nameerror
+				span
+					i Database error: #{nameerror}.  Please try again.
+
+	p Or you can change your password here:
+
+	form(name="changepassword" id="changepassword" action="/user/changepassword" method="post")
 		p (Under construction)
-		input(type="text" name="fullname" id="fullname" value="#{user.fullname}")
-		span  &nbsp&nbsp;
-			button(type="submit" name="submitName" id="submitName") Update
-		if nameerror
-			span
-				i Database error: #{nameerror}.  Please try again.
-
-	p Or you can reset your password here:
-
-	p (Under construction)
-
+		label Current password:
+		br
+		input(type="password" name="oldpassword" id="oldpassword")
+		br
+		label New password:
+		br
+		input(type="password" name="newpassword" id="newpassword")
+		br
+		label Retype (confirm) new password:
+		br
+		input(type="password" name="confirmpassword" id="confirmpassword")
