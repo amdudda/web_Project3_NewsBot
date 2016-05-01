@@ -29,6 +29,7 @@ h3 {
 
 .wrapper {
 	margin-left:50px
+	position: relative;
 }
 
 .articleSummary {
