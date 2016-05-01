@@ -35,4 +35,16 @@ router.post('/changename', isLoggedIn, function(req,res,next){
 	
 });
 
+/* POST a password change */
+router.post('/changepassword', isLoggedIn, function(req,res,next){
+	var newpass = req.body.newpassword;
+	var confpass = req.body.confpassword;
+	// TODO - also verify they match on the client side before submitting the request.
+	if (newpass == confpass) {
+		// TODO test the old password to verify it matches the one we have on file
+		// TODO hash & save the new password
+		// if successfully saved, render user with success message.
+	}
+});
+
 module.exports = router;

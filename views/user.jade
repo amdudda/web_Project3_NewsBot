@@ -31,3 +31,13 @@ block content
 		label Retype (confirm) new password:
 		br
 		input(type="password" name="confirmpassword" id="confirmpassword")
+		br
+		button(type="submit" name="SubmitPwd" id="SubmitPwd" enabled=false) Reset Password
+
+	p The only other persistent data we keep are the following three things:
+	ul
+		li Your signup date: #{user.signUpDate.toLocaleDateString()}
+		li Date and time of your last login: #{user.lastLoginDate.toLocaleDateString()} at #{user.lastLoginDate.toLocaleTimeString()} 
+		li Your list of 
+			a(href="/favorites") favorites
+		
