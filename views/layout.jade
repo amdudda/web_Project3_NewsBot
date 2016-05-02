@@ -7,11 +7,14 @@ html
 		.heading
 			div.floatright
 				if user
-					span Hello, #{user.fullname}!  Click to&nbsp;
-						a(href="/favorites") view your favorites.
-					br 
-					span Or&nbsp;
-						a(href="/logout") log out.
+					span Hello, #{user.fullname}!  You can:&nbsp;
+					ul
+						li
+							a(href="/favorites") View your favorites.
+						li
+							a(href="/user") Update your user information.
+						li
+							a(href="/logout") Log out.
 				else
 					a(href="/login") Log in or register
 			h1 #{title}
