@@ -37,13 +37,28 @@ router.post('/changename', isLoggedIn, function(req,res,next){
 
 /* POST a password change */
 router.post('/changepassword', isLoggedIn, function(req,res,next){
+	var oldpass = req.body.oldpassword;
 	var newpass = req.body.newpassword;
-	var confpass = req.body.confpassword;
+	var confpass = req.body.confirmpassword;
+	var myUserId = req.user._id;
+	console.log("np: " + newpass + ", cp: " + confpass);
 	// TODO - also verify they match on the client side before submitting the request.
 	if (newpass == confpass) {
-		// TODO test the old password to verify it matches the one we have on file
-		// TODO hash & save the new password
-		// if successfully saved, render user with success message.
+		// test the old password to verify it matches the one we have on file
+		User.findById(myUserId,	function(err,user) {
+			var isValidPwd = (user.validPassword(oldpass));
+			// if error, something went REALLY wrong!  send user to login page
+			if (err) {
+				res.render('user',{title: myTitle, user: req.user, reseterr: err});
+			}
+			else if (!isValidPwd) {
+				// if invalid password, go back and let user try again
+				res.render('user',{title: myTitle, user: req.user, reseterr: 'Invalid password.  Please try again'});
+			} else if (isValidPwd) {
+			// TODO hash & save the new password
+			// if successfully saved, render user with success message.
+			}
+		});
 	}
 });
 

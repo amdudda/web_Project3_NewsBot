@@ -243,7 +243,7 @@ function fetchNYTData() {
 			parseNytData(nytData);
 		}
 		else {
-			console.log("Error retrieving from NYT: " + error);
+			console.log("Error retrieving from NYT: " + (error || nytResp.body));
 		}
 		//notify the system we're done processing the data
 		nytDone = true;

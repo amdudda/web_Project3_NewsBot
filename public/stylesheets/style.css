@@ -78,3 +78,7 @@ div.floatright {
 	display: none;
 }
 
+.pwderr {
+	font-style: italic;
+	font-weight: bold;
+}

@@ -5,7 +5,7 @@ block content
 
 	h3 This is the user account management page.
 
-	p You can change your display name here:
+	h4 You can change your display name here:
 
 	form(name="changeName" id="changename" action="/user/changename" method="post") 
 		p 
@@ -16,9 +16,11 @@ block content
 				span
 					i Database error: #{nameerror}.  Please try again.
 
-	p Or you can change your password here:
+	h4 Or you can change your password here:
 
 	form(name="changepassword" id="changepassword" action="/user/changepassword" method="post")
+		if reseterr
+			p.pwderr Error resetting password: #{reseterr}
 		p (Under construction)
 		label Current password:
 		br
@@ -32,7 +34,7 @@ block content
 		br
 		input(type="password" name="confirmpassword" id="confirmpassword")
 		br
-		button(type="submit" name="SubmitPwd" id="SubmitPwd" disabled=true) Reset Password
+		button(type="submit" name="SubmitPwd" id="SubmitPwd" disabled=false) Reset Password
 
 	p The only other persistent data we keep are the following three things:
 	ul
