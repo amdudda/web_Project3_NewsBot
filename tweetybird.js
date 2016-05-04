@@ -234,10 +234,10 @@ function fetchNYTData() {
 		}
 
 	// send the request
-	request( {uri: baseUrl, qs: params} , function(error, ntyResp, body) {
+	request( {uri: baseUrl, qs: params} , function(error, nytResp, body) {
 		// for now, just log the response body
-		//console.log(body);
-		if (!error) {
+		//console.log("body is: " + nytResp.statusCode);
+		if (!error && nytResp.statusCode != 500) {
 			nytData = JSON.parse(body);
 			// send the data to be parsed and added to the news array
 			parseNytData(nytData);
