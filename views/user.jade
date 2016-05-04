@@ -28,13 +28,13 @@ block content
 		br
 		label New password:
 		br
-		input(type="password" name="newpassword" id="newpassword")
+		input.newpwd(type="password" name="newpassword" id="newpassword")
 		br
 		label Retype (confirm) new password:
 		br
-		input(type="password" name="confirmpassword" id="confirmpassword")
+		input.newpwd(type="password" name="confirmpassword" id="confirmpassword")
 		br
-		button(type="submit" name="SubmitPwd" id="SubmitPwd" disabled=false) Reset Password
+		button(type="submit" name="SubmitPwd" id="SubmitPwd" disabled=true) Reset Password
 
 	p The only other persistent data we keep are the following three things:
 	ul
