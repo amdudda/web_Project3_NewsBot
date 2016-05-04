@@ -14,6 +14,7 @@ The web page interacts with the MongoDB datastore to pull up recent articles. Th
 
 * User password management is not yet fully implemented. The routes are set up and working, but I need to do some client-side code so that reset submission can only happen if the new password is successfully confirmed.
 * I noticed some odd layout quirks when testing the web site on my Kindle. I may switch to using Bootstrap to handle CSS styling of the pages.
+* Sometime after my initial deployment, my NYT api started generating errors, and it seems to be affecting my ability to fetch & store their data. So my tweets don't seem to be getting tweeted.
 
 ### Possible Additional Features
 
