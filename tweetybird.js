@@ -154,6 +154,7 @@ function fetchNewsData(callback) {
 
 	setInterval( function() {
 		// render the page once all processes are done
+		//console.log("Guardian: " + GuardianDone + ", NYT: " + nytDone + ", Bing: " + BingDone);
 		if (GuardianDone && nytDone && BingDone) {
 			// sort the array first!
 			newsArray.sort(sortByDate);
@@ -191,16 +192,18 @@ function fetchGuardianData() {
 		}
 		else {
 			console.log("Error retrieving from Guardian: " + error);
+			// notify the system that we're done getting Guardian Data.	
+			GuardianDone = true;
 		}
-		// notify the system that we're done getting Guardian Data.	
-		GuardianDone = true;
+		
 	});	
 }
 
 function parseGuardianData(jsonResp) {
 	var myNews = jsonResp.response.results;
 	//console.log("guardian data:");
-	//console.log(myNews[0]);
+	console.log(myNews.length + " Guardian article found");
+	if (myNews.length == 0) { GuardianDone = true; }
 	// Iterate through results, parse date and time, and append to that result
 	for (i=0; i<myNews.length; i++){
 		var itemTimestamp = myNews[i].webPublicationDate;
@@ -216,6 +219,7 @@ function parseGuardianData(jsonResp) {
 			'itemTime': itemTime
 			}
 		newsArray.push(myItemInfo);
+		if (i >= myNews.length -1) { GuardianDone = true; }
 	}
 }
 
@@ -244,9 +248,11 @@ function fetchNYTData() {
 		}
 		else {
 			console.log("Error retrieving from NYT: " + (error || nytResp.body));
+			//notify the system we're done processing the data
+			nytDone = true;
 		}
 		//notify the system we're done processing the data
-		nytDone = true;
+		//nytDone = true;
 	});
 
 }
@@ -256,6 +262,7 @@ function parseNytData(myData) {
 	//console.log(myData);	
 	var newsItems = myData.response.docs;
 	console.log(newsItems.length + " NYT articles found")
+	if (newsItems.length == 0) { nytDone = true; }
 	//console.log("nyt data:");
 	//console.log(newsItems[0].abstract);
 	for (var j = 0; j<newsItems.length; j++) {
@@ -279,6 +286,7 @@ function parseNytData(myData) {
 			console.log(myItemInfo);
 			newsArray.push(myItemInfo);
 		}
+		if (i >= newsItems.length -1) { nytDone = true; }
 	}
 
 }
@@ -311,14 +319,16 @@ function fetchBingData(){
 			parseBingData(body.d.results);
 		} else {
 			console.log("Error retrieving from Bing: " + error);
+			BingDone = true;
 		}
 	});
-	BingDone = true;
+	//BingDone = true;
 }
 
 function parseBingData(newsItems){
 	//console.log('bing data:');
 	console.log(newsItems.length + " Bing articles found");
+	if (newsItems.length == 0) { BingDone = true; }
 	for (var i=0; i<newsItems.length; i++) {
 		var newsItem = newsItems[i];
 		var headline = newsItem.Title;
@@ -341,5 +351,6 @@ function parseBingData(newsItems){
 			//console.log("item" + i + ": " + JSON.stringify(itemData) + "\n");
 			newsArray.push(itemData);
 		}
+		if (i >= newsItems.length -1) { BingDone = true; }
 	}
 }
