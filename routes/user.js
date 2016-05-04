@@ -41,10 +41,11 @@ router.post('/changepassword', isLoggedIn, function(req,res,next){
 	var newpass = req.body.newpassword;
 	var confpass = req.body.confirmpassword;
 	var myUserId = req.user._id;
+	var pagedata = {title: myTitle, user: req.user};
 	console.log("np: " + newpass + ", cp: " + confpass);
 	// TODO - also verify they match on the client side before submitting the request.
 	if (newpass == confpass) {
-		var pagedata = {title: myTitle, user: req.user};
+		
 		// test the old password to verify it matches the one we have on file
 		User.findById(myUserId,	function(err,user) {
 			var isValidPwd = (user.validPassword(oldpass));
@@ -74,6 +75,9 @@ router.post('/changepassword', isLoggedIn, function(req,res,next){
 				});
 			}
 		});
+	} else {  // passwords don't match, complain to user
+		pagedata.resetstatus = 'New and confirmation passwords did not match. Please try again.';
+		res.render('user', pagedata);
 	}
 });
 
