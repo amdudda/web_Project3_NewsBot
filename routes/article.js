@@ -64,9 +64,9 @@ router.get('/add/:article_id',isLoggedIn, function(req,res,next){
 						// set response to 304 not modified - this error happens if what was added was already in the array
 						res.status(304).send("duplicate record");
 					} else {
-					console.log("error [" + err.code + "] saving favorite: " + err);  
-					// set response to 500 server error
-					// we can just fix the star on the client side
+						console.log("error [" + err.code + "] saving favorite: " + err);  
+						// set response to 500 server error
+						// we can just fix the star on the client side
 						res.status(500).send("misc error on server");
 					}
 				} else {

@@ -113,7 +113,7 @@ function changeFave(star,myUrl){
 
 function reactToResponse(star){
 	//console.log("reacting to response");
-	//console.log("working with: " + star.src);
+	console.log("working with: " + star.src);
 	// switch the colors of the stars.
 	if (star.src == yellowStar) { star.src = greyStar; }
 	else { star.src = yellowStar; }
