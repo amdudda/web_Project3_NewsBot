@@ -8,7 +8,11 @@ This program is a Twitter News Bot with accompanying web site.  It gathers data 
 
 There are two major components to the code: the bot code, which is the file "tweetybird.js", and the web site, which is managed through "app.js" and the files in the routes directory. Tweetybird.js connects to the three APIs, stores the results in an array of articles, and saves them to a MongoDB database. Articles that are already in the database are discarded, and new ones are stored in a "tweetables" array.  The tweetables are forwarded to a callback that tweets the articles at three-minute intervals.
 
-The web page interacts with the MongoDB datastore to pull up recent articles. The site also allows people to create user accounts so they can save articles into a list of personal favorites. I had to use an npm module to force the site to run over https so that user data (such as passwords) get encrypted in transit.  It also has a search page so people can search for articles stored in the database.
+The web page (hosted at https://transnewspulse.herokuapp.com/) interacts with the MongoDB datastore to pull up recent articles. The site also allows people to create user accounts so they can save articles into a list of personal favorites. I had to use an npm module to force the site to run over https so that user data (such as passwords) get encrypted in transit.  It also has a search page so people can search for articles stored in the database.
+
+### Prerequisites to Run
+* This runs on Nodejs with a MongoDB datastore
+* It also requires Twitter API consumer & client keys, and keys for the NYT, Guardian, and Bing APIs.
 
 ### Known Issues
 
