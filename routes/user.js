@@ -44,19 +44,34 @@ router.post('/changepassword', isLoggedIn, function(req,res,next){
 	console.log("np: " + newpass + ", cp: " + confpass);
 	// TODO - also verify they match on the client side before submitting the request.
 	if (newpass == confpass) {
+		var pagedata = {title: myTitle, user: req.user};
 		// test the old password to verify it matches the one we have on file
 		User.findById(myUserId,	function(err,user) {
 			var isValidPwd = (user.validPassword(oldpass));
-			// if error, something went REALLY wrong!  send user to login page
+			// if error, something went REALLY wrong!  reload with error message
 			if (err) {
-				res.render('user',{title: myTitle, user: req.user, reseterr: err});
+				pagedata.resetstatus = "Error resetting password: " + err;
+				res.render('user',pagedata);
 			}
 			else if (!isValidPwd) {
 				// if invalid password, go back and let user try again
-				res.render('user',{title: myTitle, user: req.user, reseterr: 'Invalid password.  Please try again'});
+				pagedata.resetstatus = 'Invalid password.  Please try again';
+				res.render('user',pagedata);
 			} else if (isValidPwd) {
-			// TODO hash & save the new password
-			// if successfully saved, render user with success message.
+			// hash & save the new password
+				var hashNewPwd = user.generateHash(newpass);
+				user.local.password = hashNewPwd;
+				user.save(function(err){
+					if (err) {
+						pagedata.resetstatus = "Error saving new password: " + err;
+						res.render('user', pagedata);
+					}
+					else {
+						// if successfully saved, render user with success message.
+						pagedata.resetstatus = "Password sucessfully reset!";
+						res.render('user', pagedata);
+					}
+				});
 			}
 		});
 	}

@@ -19,8 +19,8 @@ block content
 	h4 Or you can change your password here:
 
 	form(name="changepassword" id="changepassword" action="/user/changepassword" method="post")
-		if reseterr
-			p.pwderr Error resetting password: #{reseterr}
+		if resetstatus
+			p.resetstatus #{resetstatus}
 		p (Under construction)
 		label Current password:
 		br
