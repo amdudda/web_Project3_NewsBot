@@ -22,7 +22,8 @@ block content
 		if resetstatus
 			p.resetstatus #{resetstatus}
 		p.resetstatus (Under construction)
-		div(style="display:none;")
+		// div(style="display:none;")
+		div(style="margin-left:25px;")
 			label Current password:
 			br
 			input(type="password" name="oldpassword" id="oldpassword")
@@ -44,3 +45,4 @@ block content
 		li Your list of 
 			a(href="/favorites") favorites
 		
+	script(src="/javascripts/passchange.js" type="text/javascript")

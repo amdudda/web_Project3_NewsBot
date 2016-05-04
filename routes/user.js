@@ -56,7 +56,7 @@ router.post('/changepassword', isLoggedIn, function(req,res,next){
 			}
 			else if (!isValidPwd) {
 				// if invalid password, go back and let user try again
-				pagedata.resetstatus = 'Invalid password.  Please try again';
+				pagedata.resetstatus = "Invalid current password.  Please try again";
 				res.render('user',pagedata);
 			} else if (isValidPwd) {
 			// hash & save the new password
