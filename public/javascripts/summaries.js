@@ -68,6 +68,7 @@ for (var s = 0; s<allStars.length; s++){
 
 	myStar.addEventListener("click", function() {
 		var artID = this.id.substring(4);
+		alert("src=" + this.src);
 		var whichStar = "grey";  // determine which star has been clicked
 		// if (this.src == yellowStar) whichStar="yellow";
 		//alert("articleID: " + artID + "\nstar: " + whichStar);
@@ -113,7 +114,7 @@ function changeFave(star,myUrl){
 
 function reactToResponse(star){
 	//console.log("reacting to response");
-	console.log("working with: " + star.src);
+	//console.log("working with: " + star.src);
 	// switch the colors of the stars.
 	if (star.src == yellowStar) { star.src = greyStar; }
 	else { star.src = yellowStar; }
