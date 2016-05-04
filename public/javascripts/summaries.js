@@ -48,8 +48,8 @@ var greyStar;
 var baseUrl;
 var production = true;
 if (production) {
-	yellowStar = "/images/sm-yellow-star.jpg";
-	greyStar = "/images/sm-gray-star.jpg";
+	yellowStar = "https://transnewspulse.herokuapp.com/images/sm-yellow-star.jpg";
+	greyStar = "https://transnewspulse.herokuapp.com/images/sm-gray-star.jpg";
 	baseUrl = "https://transnewspulse.herokuapp.com/article";
 }
 else {
