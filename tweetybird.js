@@ -154,8 +154,10 @@ function fetchNewsData(callback) {
 
 	setInterval( function() {
 		// render the page once all processes are done
-		//console.log("Guardian: " + GuardianDone + ", NYT: " + nytDone + ", Bing: " + BingDone);
+		console.log("Guardian: " + GuardianDone + ", NYT: " + nytDone + ", Bing: " + BingDone);
 		if (GuardianDone && nytDone && BingDone) {
+			// log that we're ready
+			console.log("preparing to tweet " + newsArray.length + " articles.");
 			// sort the array first!
 			newsArray.sort(sortByDate);
 			// do our callback work
@@ -262,7 +264,10 @@ function parseNytData(myData) {
 	//console.log(myData);	
 	var newsItems = myData.response.docs;
 	console.log(newsItems.length + " NYT articles found")
-	if (newsItems.length == 0) { nytDone = true; }
+	if (newsItems.length == 0) { 
+		nytDone = true; 
+		return;
+	}
 	//console.log("nyt data:");
 	//console.log(newsItems[0].abstract);
 	for (var j = 0; j<newsItems.length; j++) {
@@ -283,10 +288,10 @@ function parseNytData(myData) {
 				'summary': myNews.abstract
 				}
 			//console.log('nyt summary:' + myItemInfo.summary);
-			console.log(myItemInfo);
+			//console.log(myItemInfo);
 			newsArray.push(myItemInfo);
 		}
-		if (i >= newsItems.length -1) { nytDone = true; }
+		if (j >= newsItems.length -1) { nytDone = true; }
 	}
 
 }
