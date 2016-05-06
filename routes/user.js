@@ -43,7 +43,7 @@ router.post('/changepassword', isLoggedIn, function(req,res,next){
 	var myUserId = req.user._id;
 	var pagedata = {title: myTitle, user: req.user};
 	console.log("np: " + newpass + ", cp: " + confpass);
-	// TODO - also verify they match on the client side before submitting the request.
+	// I also verify the two passwords match on the client side so they should match here, but Just In Case™...
 	if (newpass == confpass) {
 		
 		// test the old password to verify it matches the one we have on file

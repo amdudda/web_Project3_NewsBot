@@ -17,7 +17,7 @@ The web page (hosted at https://transnewspulse.herokuapp.com/) interacts with th
 ### Known Issues
 
 * I noticed some odd layout quirks when testing the web site on my Kindle. I may switch to using Bootstrap to handle CSS styling of the pages.
-* Sometime after my initial deployment, my NYT api started generating errors, and it seems to be affecting my ability to fetch & store their data. So my tweets don't seem to be getting tweeted. (I think I have traced the cause to callbacks being told to proceed before the data is actually ready.)
+* I am still debugging some intermittent errors in processing my NYT data.
 
 ### Possible Additional Features
 

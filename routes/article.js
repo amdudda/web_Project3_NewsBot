@@ -35,7 +35,8 @@ router.param("article_id", function(req, res, next, articleId) {
         if (err) {
             //res.render("favorites", { msg: "unable to find article", "error": error});
 			console.log("error finding article by id:" + err);
-			// TODO set response to 304 "not modified" and unable to find the article
+			// set response to 304 "not modified" or 500/something and unable to find the article
+			res.status(500).send("Database error: unable to find article.")
         }
         req.article = article;
         return next();

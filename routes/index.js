@@ -117,12 +117,18 @@ router.get('/searchArchive',function(req,res,next){
 		console.log(qParams);
 	}
 
-	// fetch data from mongoDB and send back t osearch page
-	NewsItems.find(qParams).sort({timeStamp : 'desc'}).exec( function(err,newsArray){
-		if (err) console.log(err);
-		res.render('search', {title: myTitle, queryText: qText, headlines: newsArray});
-	});
-
+	// fetch data from mongoDB and send back to search page
+	// if qparams is empty, don't bother processing, just notify user.
+	if (qParams == "") {
+		res.render('search', {title: myTitle, queryText: 'Invalid search parameters.  Please try again.'});
+	}
+	else {
+		// get data and return to page
+		NewsItems.find(qParams).sort({timeStamp : 'desc'}).exec( function(err,newsArray){
+			if (err) console.log(err);
+			res.render('search', {title: myTitle, queryText: qText, headlines: newsArray});
+		});
+	}
 });
 
 // a function that returns a query string for text-based searches
@@ -147,12 +153,11 @@ function getTextSearchParams(formData){
 		regex = new RegExp(formData.searchString,"i");
 		qParm = { $or : [ {summary : regex}, {webTitle: regex} ]};
 		
-	} else {  // TODO we have invalid selection, return everything?
-		qParm = {};
+	} else {  // we have invalid selection, signal with empty string.
+		qParm = "";
 	}
 
-	// append final curly braces
-	//qParm +=  "}}";
+	// return our query parameters
 	return qParm;
 }
 

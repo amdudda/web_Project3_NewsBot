@@ -118,12 +118,12 @@ module.exports = function(passport) {
           if (!user.validPassword(password)) {
             return done(null, false, req.flash('loginMessage', 'Wrong password'));
           }
-			// TODO: update last login date
+			// update last login date
 			var loginDate = Date.now();
 			user.lastLoginDate = loginDate;
 			// save data and return the user
 			user.save(function (err) {
-                // TODO error handling
+                // error handling
                 if (err) return done(err);
                 return done(null, user);
             });
