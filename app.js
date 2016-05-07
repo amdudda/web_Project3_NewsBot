@@ -15,8 +15,21 @@ var flash = require('connect-flash');
 var mongoose = require('mongoose');
 var mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/transnews';
 //console.log('mongodb url set to: ' + mongoUrl.substring(0,15)); // DON'T send the whole thing plaintext, eeek!
-var db = mongoose.connect(mongoUrl);
+var db = mongoose.createConnection(mongoUrl);
 //TODO error handler
+// cadged from http://stackoverflow.com/questions/10873199/how-to-handle-mongoose-db-connection-interruptions
+db.on('error', function (err) {
+	// shouldn't need this line : if (err) // couldn't connect
+	// log the error
+	console.log('database connection error: ' + err);
+	// hack the driver to allow re-opening after initial network error
+	db.db.close();
+	// retry if desired
+	db.open(mongoUrl);
+
+});
+
+mongoose.connect(mongoUrl);
 
 // site routes
 var routes = require('./routes/index');
