@@ -16,6 +16,7 @@ var mongoose = require('mongoose');
 var mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/transnews';
 //console.log('mongodb url set to: ' + mongoUrl.substring(0,15)); // DON'T send the whole thing plaintext, eeek!
 var db = mongoose.connect(mongoUrl);
+//TODO error handler
 
 // site routes
 var routes = require('./routes/index');
@@ -45,11 +46,6 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
-//DB
-//var url = 'mongodb://localhost:27017/todo';
-mongoose.createConnection(mongoUrl);
-//TODO error handler
 
 /*End of stuff for passport. */
 
