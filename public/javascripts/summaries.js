@@ -68,7 +68,7 @@ for (var s = 0; s<allStars.length; s++){
 
 	myStar.addEventListener("click", function() {
 		var artID = this.id.substring(4);
-		alert("src=" + this.src);
+		//alert("src=" + this.src);
 		var whichStar = "grey";  // determine which star has been clicked
 		// if (this.src == yellowStar) whichStar="yellow";
 		//alert("articleID: " + artID + "\nstar: " + whichStar);
