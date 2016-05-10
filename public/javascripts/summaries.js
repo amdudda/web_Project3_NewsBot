@@ -1,5 +1,6 @@
 // this script handles hiding/showing article summaries.
-
+// set production to false for local testing/debugging.
+var production = true;
 var allSummaries = document.getElementsByClassName("articleSummary");
 
 // iterate through each summary, find the preceding a tag, and add mouseover/mouseout
@@ -46,7 +47,6 @@ function AjaxRequest(){
 var yellowStar;
 var greyStar;
 var baseUrl;
-var production = true;
 if (production) {
 	yellowStar = "https://transnewspulse.herokuapp.com/images/sm-yellow-star.jpg";
 	greyStar = "https://transnewspulse.herokuapp.com/images/sm-gray-star.jpg";

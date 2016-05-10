@@ -13,6 +13,7 @@ The web page (hosted at https://transnewspulse.herokuapp.com/) interacts with th
 ### Prerequisites to Run
 * This runs on Nodejs with a MongoDB datastore
 * It also requires Twitter API consumer & client keys, and keys for the NYT, Guardian, and Bing APIs.
+* Most files are set up to detect dev vs. production automatically, but if you need to test or debug /public/javascripts/summaries.js, you will need to set "production" to false in line 3.
 
 ### Known Issues
 
