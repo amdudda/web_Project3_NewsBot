@@ -32,7 +32,8 @@ var searchterm = "transgender"; // our search term
 var newsArray = [];  // array to store news items
 var tweetables = []; // array storing only new news items
 var GuardianDone = false;  // these help the app decide when all results have been processed
-var nytDone = false;
+// TODO: fix NYT api.
+//var nytDone = false;
 var BingDone = false;
 var curDateStamp;
 	var threeDays = 3*24*60*60*1000;
@@ -149,7 +150,7 @@ function fetchNewsData(callback) {
 	curDateStamp = new Date();
 	timeInterval = new Date(curDateStamp - eightHours);
 	fetchGuardianData();
-	fetchNYTData();
+	//fetchNYTData();
 	fetchBingData();
 
 	setInterval( function() {
