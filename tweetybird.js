@@ -33,7 +33,7 @@ var newsArray = [];  // array to store news items
 var tweetables = []; // array storing only new news items
 var GuardianDone = false;  // these help the app decide when all results have been processed
 // TODO: fix NYT api.
-//var nytDone = false;
+var nytDone = true;
 var BingDone = false;
 var curDateStamp;
 	var threeDays = 3*24*60*60*1000;
