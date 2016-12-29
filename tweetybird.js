@@ -5,6 +5,7 @@
 // API keys
 var G_APIKEY = process.env.GUARDIAN_API_KEY; 
 var NYT_APIKEY = process.env.NYT_API_KEY;
+console.log(NYT_APIKEY);
 var BING_APIKEY = process.env.BING_API_KEY;
 
 // required modules
@@ -33,7 +34,7 @@ var newsArray = [];  // array to store news items
 var tweetables = []; // array storing only new news items
 var GuardianDone = false;  // these help the app decide when all results have been processed
 // TODO: fix NYT api.
-var nytDone = true;
+var nytDone = false;
 var BingDone = false;
 var curDateStamp;
 	var threeDays = 3*24*60*60*1000;
@@ -150,7 +151,7 @@ function fetchNewsData(callback) {
 	curDateStamp = new Date();
 	timeInterval = new Date(curDateStamp - eightHours);
 	fetchGuardianData();
-	//fetchNYTData();
+	fetchNYTData();
 	fetchBingData();
 
 	setInterval( function() {
